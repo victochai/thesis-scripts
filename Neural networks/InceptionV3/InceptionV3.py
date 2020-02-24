@@ -57,11 +57,10 @@ layer_names = [layer.name for layer in pre_trained_model.layers]
 layer_outputs = [layer.output for layer in pre_trained_model.layers]
 
 # InceptionV3 has 48 layers
-# Only conv layers are needed if we want fairer comparison with the brain representations
-# Here I use regular expressions to select only conv layers
+# Only CONV layers are needed if we want fairer comparison with the brain representations
+# Here I use regular expressions to select only CONV layers
 myRegex = re.compile(r'''(\bconv2d\b|\bconv2d_\d\b|\bconv2d_\d{2}\b)+?''')
 layers = myRegex.findall(str(layer_names))
-del layer_names, layer_outputs
 
 #%% Output tensors
 
@@ -80,33 +79,42 @@ for idx in idcs:
     l_outputs.append(layer_outputs[idx])
 del idcs, idx, l, layer_outputs, layer_names  
 
-#%% Feature maps
-# Will be memory errors if we do that on CPU, so.. Do it partially
+#%% ##### FEATURE MAPS #####
+# On CPU --> memory errors. Therefore do everything partially
 
-l_outputs = l_outputs[0:5] # Change here
+# InceptionV3 architecture (CONV layers percpective)
+# 5 COVN layers
+# 3 A blocks
+# 1st normalization layer
+# 4 B blocks
+# 2nd normalization layer
+# 2 C bocks
+# Average Pool
+# Softmax
 
+# Nice architecture drawing is here: 
+# http://josephpcohen.com/w/visualizing-cnn-architectures-side-by-side-with-mxnet/
+
+#%% First 5 layers
+
+l_outputs = l_outputs[0:5]
 model = Model(pre_trained_model.input, l_outputs)
 feature_maps = model.predict(images)
-for _ in range(0,5): # Change here
+for _ in range(0,5): 
     feature_maps[_] = feature_maps[_].reshape((n_samples,-1))
     print(feature_maps[_].shape)
     
-#%% Concatenating feature maps
-# InceptionV3 has 48 layers, many of them contain parallel computations:
-# So, conv layers must be concatenated
-# How: nice drawing is here: http://josephpcohen.com/w/visualizing-cnn-architectures-side-by-side-with-mxnet/
+#%% Module A (3 blocks, 3 layers)
 
-# Modules A
 print(layers[5:12])
 module_A_1 = l_outputs[5:12] # 3 layers here
 print(layers[12:19])
-module_A_2 = l_outputs[12:19] # 3 layers here
+module_A_2 = l_outputs[12:19] 
 print(layers[19:26])
-module_A_3 = l_outputs[19:26] # 3 layers here
+module_A_3 = l_outputs[19:26] 
 
 model = Model(pre_trained_model.input, module_A_3) # Change this
 feature_maps = model.predict(images)
-# Concatenate some layers: the result shoult be 3 layers
 feature_maps = [
      feature_maps[0], 
      np.concatenate((feature_maps[1], feature_maps[2]), axis=3),
@@ -118,15 +126,16 @@ feature_maps = [
              ), axis=3)
      ]
 
-for _ in range(0,3): # Change here
+for _ in range(0,3): 
     feature_maps[_] = feature_maps[_].reshape((n_samples,-1))
     print(feature_maps[_].shape)
 
-# Normalization after module A
-del module_A_1, module_A_2, module_A_3
+#%% 1st normalization (1 block, 3 layers)
+    
+# del module_A_1, module_A_2, module_A_3
 print(layers[26:30]) # 3 Layers here
 norm_after_A = l_outputs[26:30]
-model = Model(pre_trained_model.input, norm_after_A) # Change this
+model = Model(pre_trained_model.input, norm_after_A) # Change thi
 feature_maps = model.predict(images)
 # Concatenate some layers: the result shoult be 3 layers
 feature_maps = [
@@ -138,12 +147,11 @@ feature_maps = [
              ), axis=3)
      ]
 
-for _ in range(0,3): # Change here
+for _ in range(0,3):
     feature_maps[_] = feature_maps[_].reshape((n_samples,-1))
     print(feature_maps[_].shape)
 
-# Module B
-# Module B repeats 4 times
+#%% Module B (4 blocks, 5 layers)
     
 del norm_after_A
 print(layers[30:40]) # 5 Layers here
@@ -152,9 +160,8 @@ module_B_2 = l_outputs[40:50]
 module_B_3 = l_outputs[50:60]
 module_B_4 = l_outputs[60:70]
 
-model = Model(pre_trained_model.input, module_B_4) # Change this
+model = Model(pre_trained_model.input, module_B_4) 
 feature_maps = model.predict(images)
-# Concatenate some layers: the result shoult be 5 layers
 feature_maps = [
      feature_maps[0],
      feature_maps[1],
@@ -174,17 +181,17 @@ feature_maps = [
              ), axis=3),
      ]
 
-for _ in range(0,5): # Change here
+for _ in range(0,5): 
     feature_maps[_] = feature_maps[_].reshape((n_samples,-1))
     print(feature_maps[_].shape)
 
-# Normalization after module B
-del module_B_2, module_B_3, module_B_4, module_B_1
+#%% 2nd normalization (1 block, 4 layers)
+    
+# del module_B_2, module_B_3, module_B_4, module_B_1
 print(layers[70:76]) # 4 layers here
 norm_after_B = l_outputs[70:76]
-model = Model(pre_trained_model.input, norm_after_B) # Change this
+model = Model(pre_trained_model.input, norm_after_B) 
 feature_maps = model.predict(images)
-# Concatenate some layers: the result shoult be 5 layers
 feature_maps = [
      feature_maps[0],
      feature_maps[1],
@@ -198,22 +205,20 @@ feature_maps = [
              ), axis=3)
      ]
 
-for _ in range(0,4): # Change here
+for _ in range(0,4):
     feature_maps[_] = feature_maps[_].reshape((n_samples,-1))
     print(feature_maps[_].shape)
     
-# Module C
-# It is repeated 2 times
+#%% Module C (2 blocks, 3 layers)
 
 del norm_after_B
 print(layers[76:85]) # 3 Layers here
 module_C_1 = l_outputs[76:85]   
-print(layers[85:]) # 3 Layers here
+print(layers[85:]) 
 module_C_2 = l_outputs[85:]
  
 model = Model(pre_trained_model.input, module_C_2) # Change this
 feature_maps = model.predict(images)
-# Concatenate some layers: the result shoult be 3 layers
 feature_maps = [
      feature_maps[0],
      np.concatenate((
@@ -230,13 +235,14 @@ feature_maps = [
              ), axis=3)
      ]
 
-for _ in range(0,3): # Change here
+for _ in range(0,3): 
     feature_maps[_] = feature_maps[_].reshape((n_samples,-1))
     print(feature_maps[_].shape) 
 
-# LAST LAYER!!!
+#%% LAST LAYER: average pool
+    
 feature_maps = []
-del module_C_1, module_C_2, l_outputs, layers
+# del module_C_1, module_C_2, l_outputs, layers
 output = pre_trained_model.get_layer('avg_pool').output
 model = Model(pre_trained_model.input, output)
 feature_maps.append(model.predict(images))
@@ -263,7 +269,6 @@ chairs = []
 #                                           body parts vs. tools,
 #                                           body parts vs. man,
 #                                           body parts vs. nman)
-
 
 k = 47 # Change this
 
@@ -370,19 +375,74 @@ plt.title("InceptionV3: Body parts vs. nonmanipulable objects correlations")
 plt.legend(("Corr: bodies vs. Nman", "Corr: hands vs. Nman", "Corr: faces vs. Nman"), loc='lower left')
 plt.show()
 
-#%% Confusion matrices
+#%% ##### Confusion matrices for another analysis #####
 
-matrices = []
+#%% Big matrices
 
-for _ in range(0, 5):
-    matrices.append(np.concatenate((bodies[_].reshape(bodies[_].shape[0],1), 
-                             faces[_].reshape(faces[_].shape[0],1), 
-                             hands[_].reshape(hands[_].shape[0],1), 
-                             tools[_].reshape(tools[_].shape[0],1), 
-                             man[_].reshape(man[_].shape[0],1), 
-                             nman[_].reshape(nman[_].shape[0],1),
-                             chairs[_].reshape(chairs[_].shape[0],1)), axis=1))
+# corr_matrices = []
+for _ in range(0, 1): # Change this
+    corr_matrices.append(np.corrcoef(feature_maps[_]))
 
-matrices = {'matrices_5' : matrices}
+#%% Small matrices
     
-#%% Big confusion matrices
+feature_maps_small = []
+for _ in range(0, 1): # Change this
+    bodies = np.mean(feature_maps[_][0:48, :], 0).reshape((feature_maps[_].shape[1],1))
+    hands = np.mean(feature_maps[_][48:96, :], 0).reshape((feature_maps[_].shape[1],1))
+    faces = np.mean(feature_maps[_][96:144, :], 0).reshape((feature_maps[_].shape[1],1))
+    tools = np.mean(feature_maps[_][144:192, :], 0).reshape((feature_maps[_].shape[1],1))
+    man = np.mean(feature_maps[_][192:240, :], 0).reshape((feature_maps[_].shape[1],1))
+    nman = np.mean(feature_maps[_][240:288, :], 0).reshape((feature_maps[_].shape[1],1))
+    chairs = np.mean(feature_maps[_][288:336, :], 0).reshape((feature_maps[_].shape[1],1))
+    feature_maps_small.append(np.concatenate(
+            (bodies, hands, faces, tools, man, nman, chairs), axis=1
+            ))
+    del bodies, hands, faces, tools, man, nman, chairs
+    
+# corr_matrices_small = [] 
+for _ in range(0, 1): # Change this
+    corr_matrices_small.append(np.corrcoef(feature_maps_small[_].T))
+
+#%% Del stuff
+    
+del feature_maps, feature_maps_small
+# del l_outputs
+
+#%% Save the results
+
+# For Matlab
+corr_matrices_MATLAB = {'corr_matrices' : corr_matrices}
+corr_matrices_small_MATLAB = {'corr_matrices_small' : corr_matrices_small}
+scipy.io.savemat('corr_matrices_MATLAB.mat', corr_matrices_MATLAB)
+scipy.io.savemat('corr_matrices_small_MATLAB.mat', corr_matrices_small_MATLAB)
+
+# For Python
+import pickle
+with open('corr_M', 'wb') as f:
+    pickle.dump(corr_matrices, f)
+with open('corr_M_small', 'wb') as f:
+    pickle.dump(corr_matrices_small, f)
+    
+#%% Visualize the results
+    
+# Big matrices
+fig = plt.figure()
+fig.suptitle("InceptionV3: 48 stimuli per condition\n Bodies, faces, hands, tools, manipulable objects, nonmanipulable objects, chairs")
+for _ in range(0, len(corr_matrices)):
+    plt.subplot(6,8,_+1)
+    plt.imshow(corr_matrices[_],cmap="cividis")
+    plt.colorbar()
+    plt.axis("off")
+    plt.title(str(_+1), fontsize=6)
+plt.show()    
+
+# Small matrices
+fig = plt.figure()
+fig.suptitle("InceptionV3: Every condition is averaged\n Bodies, faces, hands, tools, manipulable objects, nonmanipulable objects, chairs")
+for _ in range(0, len(corr_matrices_small)):
+    plt.subplot(6,8,_+1)
+    plt.imshow(corr_matrices_small[_], cmap="cividis")
+    plt.colorbar()
+    plt.axis("off")
+    plt.title(str(_+1), fontsize=6)
+plt.show()        
