@@ -6,18 +6,36 @@
 
 clc, clear
 cd('D:\THESIS\DATA\DATA. CAT12');
-load('images.mat'); 
+load('images_vgg19.mat');
+images = images_vgg;
 images = permute(images, [2, 3, 4, 1]);
-disp(size(images)); % for Alexnet (227, 227, 3, 336) or (width, height, rgb_channels, n_samples)
+disp(size(images)); % for VGG (224, 224, 3, 336) or (width, height, rgb_channels, n_samples)
+clear images_vgg
 
-%% Net
+%% Layers
 
-net = alexnet;
-layers = {'conv1', 'conv2', 'conv3', 'conv4', 'conv5', 'fc6', 'fc7', 'fc8'};
+net = vgg19;
+layers = net.Layers;
+l = {}
+for i = 1:length(layers)
+    l{i,1} = layers(i).Name    
+end
+clear layers
+layers_ind = [2 4 7 9 12 14 16 18 21 23 25 27 30 32 34 36 39 42 45];
+layers = {}
+
+for i = 1:length(layers_ind)
+    index = layers_ind(i)
+    layers{i, 1} = l{index}
+end
+
+clear l index layers_ind i 
 
 %% Feature maps and correlations
+% First 8 separately due to memory restrictions
+% i = 8
 
-for i = 1:numel(layers)
+for i = 9:numel(layers)
     
     feature_maps = {}
     disp(layers{i})
@@ -75,20 +93,20 @@ end
 
 %% Save results
 
-correlations_objects_AlEX = {corr_body_objects; corr_hand_objects; corr_face_objects}
-correlations_tools_AlEX = {corr_body_tools; corr_hand_tools; corr_face_tools}
-correlations_man_AlEX = {corr_body_man; corr_hand_man; corr_face_man}
-correlations_nman_AlEX = {corr_body_nman; corr_hand_nman; corr_face_nman}
-correlations_AlEX = {correlations_objects_AlEX; correlations_tools_AlEX; ...
-                    correlations_man_AlEX; correlations_nman_AlEX}
+correlations_objects_VGG = {corr_body_objects; corr_hand_objects; corr_face_objects}
+correlations_tools_VGG = {corr_body_tools; corr_hand_tools; corr_face_tools}
+correlations_man_VGG = {corr_body_man; corr_hand_man; corr_face_man}
+correlations_nman_VGG = {corr_body_nman; corr_hand_nman; corr_face_nman}
+correlations_VGG = {correlations_objects_VGG; correlations_tools_VGG; ...
+                    correlations_man_VGG; correlations_nman_VGG}
 
-save('correlations_AlEX', 'correlations_AlEX')
+save('correlations_VGG', 'correlations_VGG')
 
 %% Plot (objects)
 
 figure();
 set(groot, 'DefaultAxesTickLabelInterpreter', 'none')
-sgtitle('Alexnet: body parts vs. objects correlations (8 layers)')
+sgtitle('VGG19: body parts vs. objects correlations (19 layers)')
 plot(corr_body_objects, '-o')
 hold on
 plot(corr_hand_objects, '-o')
@@ -98,8 +116,8 @@ legend('Bodies vs. objects', 'Hands vs. objects', 'Faces vs. objects')
 xlabel('Layers')
 ylabel('Correlations')
 ylim([0 1])
-xlim([1 8])
-xticks([1:8])
+xlim([1 19])
+xticks([1:19])
 xticklabels(layers)
 xtickangle(45)
 grid on
@@ -107,8 +125,8 @@ grid on
 %% Plot (tools)
 
 figure();
+sgtitle('VGG19: body parts vs. tools correlations (19 layers)')
 set(groot, 'DefaultAxesTickLabelInterpreter', 'none')
-sgtitle('Alexnet: body parts vs. tools correlations (8 layers)')
 plot(corr_body_tools, '-o')
 hold on
 plot(corr_hand_tools, '-o')
@@ -118,8 +136,8 @@ legend('Bodies vs. tools', 'Hands vs. tools', 'Faces vs. tools')
 xlabel('Layers')
 ylabel('Correlations')
 ylim([0 1])
-xlim([1 8])
-xticks([1:8])
+xlim([1 19])
+xticks([1:19])
 xticklabels(layers)
 xtickangle(45)
 grid on
@@ -127,8 +145,8 @@ grid on
 %% Plot (man)
 
 figure();
+sgtitle('VGG19: body parts vs. manipulable objects correlations (19 layers)')
 set(groot, 'DefaultAxesTickLabelInterpreter', 'none')
-sgtitle('Alexnet: body parts vs. manipulable objects correlations (8 layers)')
 plot(corr_body_man, '-o')
 hold on
 plot(corr_hand_man, '-o')
@@ -138,8 +156,8 @@ legend('Bodies vs. man', 'Hands vs. man', 'Faces vs. man')
 xlabel('Layers')
 ylabel('Correlations')
 ylim([0 1])
-xlim([1 8])
-xticks([1:8])
+xlim([1 19])
+xticks([1:19])
 xticklabels(layers)
 xtickangle(45)
 grid on
@@ -147,8 +165,8 @@ grid on
 %% Plot (Nman)
 
 figure();
+sgtitle('VGG19: body parts vs. non-manipulable objects correlations (19 layers)')
 set(groot, 'DefaultAxesTickLabelInterpreter', 'none')
-sgtitle('Alexnet: body parts vs. non-manipulable objects correlations (8 layers)')
 plot(corr_body_nman, '-o')
 hold on
 plot(corr_hand_nman, '-o')
@@ -158,74 +176,81 @@ legend('Bodies vs. Nman', 'Hands vs. Nman', 'Faces vs. Nman')
 xlabel('Layers')
 ylabel('Correlations')
 ylim([0 1])
-xlim([1 8])
-xticks([1:8])
+xlim([1 19])
+xticks([1:19])
 xticklabels(layers)
 xtickangle(45)
 grid on
 
 %% PLOT ALL
 
+clc, clear
+load('correlations_VGG.mat');
+correlations_objects_VGG = correlations_VGG{1, 1}
+correlations_tools_VGG = correlations_VGG{2, 1}
+correlations_man_VGG = correlations_VGG{3, 1}
+correlations_nman_VGG = correlations_VGG{4, 1}
+
 figure();
 set(groot, 'DefaultAxesTickLabelInterpreter', 'none')
-sgtitle('Alexnet: body parts vs. all objects correlations (8 layers)')
+sgtitle('VGG19: body parts vs. all objects correlations (19 layers)')
 % First subplot
 subplot(2,2,1)
-plot(corr_body_objects, '-o')
+plot(correlations_objects_VGG{1, 1}, '-o')
 hold on
-plot(corr_hand_objects, '-o')
+plot(correlations_objects_VGG{2, 1}, '-o')
 hold on
-plot(corr_face_objects, '-o')
+plot(correlations_objects_VGG{3, 1}, '-o')
 ylabel('Correlations')
 legend('Bodies vs. Objects', 'Hands vs. Objects', 'Faces vs. Objects')
 ylim([0 1])
-xlim([1 8])
-xticks([1:8])
+xlim([1 19])
+xticks([1:19])
 xticklabels(layers)
 xtickangle(45)
 grid on
 % Second subplot
 subplot(2,2,2)
-plot(corr_body_tools, '-o')
+plot(correlations_tools_VGG{1, 1}, '-o')
 hold on
-plot(corr_hand_tools, '-o')
+plot(correlations_tools_VGG{2, 1}, '-o')
 hold on
-plot(corr_face_tools, '-o')
+plot(correlations_tools_VGG{3, 1}, '-o')
 ylabel('Correlations')
 legend('Bodies vs. Tools', 'Hands vs. Tools', 'Faces vs. Tools')
 ylim([0 1])
-xlim([1 8])
-xticks([1:8])
+xlim([1 19])
+xticks([1:19])
 xticklabels(layers)
 xtickangle(45)
 grid on
 % Third subplot
 subplot(2,2,3)
-plot(corr_body_man, '-o')
+plot(correlations_man_VGG{1, 1}, '-o')
 hold on
-plot(corr_hand_man, '-o')
+plot(correlations_man_VGG{2, 1}, '-o')
 hold on
-plot(corr_face_man, '-o')
+plot(correlations_man_VGG{3, 1}, '-o')
 ylabel('Correlations')
 legend('Bodies vs. Man', 'Hands vs. Man', 'Faces vs. Man')
 ylim([0 1])
-xlim([1 8])
-xticks([1:8])
+xlim([1 19])
+xticks([1:19])
 xticklabels(layers)
 xtickangle(45)
 grid on
 % Forth subplot
 subplot(2,2,4)
-plot(corr_body_nman, '-o')
+plot(correlations_nman_VGG{1, 1}, '-o')
 hold on
-plot(corr_hand_nman, '-o')
+plot(correlations_nman_VGG{2, 1}, '-o')
 hold on
-plot(corr_face_nman, '-o')
+plot(correlations_nman_VGG{3, 1}, '-o')
 ylabel('Correlations')
 legend('Bodies vs. Nman', 'Hands vs. Nman', 'Faces vs. Nman')
 ylim([0 1])
-xlim([1 8])
-xticks([1:8])
+xlim([1 19])
+xticks([1:19])
 xticklabels(layers)
 xtickangle(45)
 grid on
