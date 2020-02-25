@@ -446,3 +446,39 @@ for _ in range(0, len(corr_matrices_small)):
     plt.axis("off")
     plt.title(str(_+1), fontsize=6)
 plt.show()        
+
+#%% Checking the last layer
+
+feature_maps = []
+output = pre_trained_model.get_layer('predictions').output
+model = Model(pre_trained_model.input, output)
+feature_maps.append(model.predict(images))
+_ = 0
+print(feature_maps[_].shape) 
+co = np.corrcoef(feature_maps[_])
+plt.imshow(co)
+plt.show()
+
+feature_maps_small = []
+for _ in range(0, 1): # Change this
+    bodies = np.mean(feature_maps[_][0:48, :], 0).reshape((feature_maps[_].shape[1],1))
+    hands = np.mean(feature_maps[_][48:96, :], 0).reshape((feature_maps[_].shape[1],1))
+    faces = np.mean(feature_maps[_][96:144, :], 0).reshape((feature_maps[_].shape[1],1))
+    tools = np.mean(feature_maps[_][144:192, :], 0).reshape((feature_maps[_].shape[1],1))
+    man = np.mean(feature_maps[_][192:240, :], 0).reshape((feature_maps[_].shape[1],1))
+    nman = np.mean(feature_maps[_][240:288, :], 0).reshape((feature_maps[_].shape[1],1))
+    chairs = np.mean(feature_maps[_][288:336, :], 0).reshape((feature_maps[_].shape[1],1))
+    feature_maps_small.append(np.concatenate(
+            (bodies, hands, faces, tools, man, nman, chairs), axis=1
+            ))
+    del bodies, hands, faces, tools, man, nman, chairs
+    
+co = np.corrcoef(feature_maps_small[_].T)
+plt.imshow(co)
+plt.show()
+
+#%% Plot everything
+
+bodies = np.load("corr_bodies_objects.npy")
+faces = np.load("corr_faces_objects.npy") 
+hands = np.load("corr_hands_objects.npy")
