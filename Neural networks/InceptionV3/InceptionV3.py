@@ -323,17 +323,54 @@ np.save('corr_hands_objects.npy', corr_hands_objects)
 
 #%% Visualizing the results
 
+#%% Loading
+
+import numpy as np
+import matplotlib.pyplot as plt
+corr_bodies_objects = np.load("corr_bodies_objects.npy")
+corr_hands_objects = np.load("corr_hands_objects.npy")
+corr_faces_objects = np.load("corr_faces_objects.npy")
+
+# Layers
+a = [(("mod_A" + str(_) + " ") * 3).split(" ") for _ in range(1,4)]
+a = [_[:-1] for _ in a]
+a = [val for sublist in a for val in sublist]
+
+norm1 = [("n1_" + str(_) + " ").split(" ") for _ in range(1,4)]
+norm1 = [_[:-1] for _ in norm1]
+norm1 = [val for sublist in norm1 for val in sublist]
+
+b = [(("mod_B" + str(_) + " ") * 5).split(" ") for _ in range(1,5)]
+b = [_[:-1] for _ in b]
+b = [val for sublist in b for val in sublist]
+
+norm2 = [("n2_" + str(_) + " ").split(" ") for _ in range(1,5)]
+norm2 = [_[:-1] for _ in norm2]
+norm2 = [val for sublist in norm2 for val in sublist]
+
+c = [(("mod_C" + str(_) + " ") * 3).split(" ") for _ in range(1,3)]
+c = [_[:-1] for _ in c]
+c = [val for sublist in c for val in sublist]
+
+layers = ["conv1", "conv2", "conv3", "conv4", "conv5"] + a + norm1 + b + norm2 + c
+layers.append("avg_pool")
+
+del a, b, c, norm1, norm2
+
+#%% Plotting
+
 # Objects
 plt.plot(corr_bodies_objects[:,0],'-o')
 plt.plot(corr_hands_objects[:,0],'-o')
 plt.plot(corr_faces_objects[:,0],'-o')
 plt.grid()
 plt.ylim((0,1))
-plt.xticks(list(range(0,48)), list(range(1,49)))
+# plt.xticks(list(range(0,48)), list(range(1,49)))
+plt.xticks(list(range(0,48)), layers, rotation=80, fontsize=8)
 plt.xlabel("Layer")
 plt.ylabel("Correlation")
-plt.title("InceptionV3: Body parts vs. objects correlations")
-plt.legend(("Corr: bodies vs. objects", "Corr: hands vs. objects", "Corr: faces vs. objects"), loc='lower left')
+plt.title("Correlation between different body parts and objects (tools + manipulable + nonmanipulable) in InceptionV3 layers")
+plt.legend(("bodies", "hands", "faces"), loc='lower left')
 plt.show()
 
 # Tools
@@ -342,11 +379,12 @@ plt.plot(corr_hands_objects[:,1],'-o')
 plt.plot(corr_faces_objects[:,1],'-o')
 plt.grid()
 plt.ylim((0,1))
-plt.xticks(list(range(0,48)), list(range(1,49)))
+# plt.xticks(list(range(0,48)), list(range(1,49)))
+plt.xticks(list(range(0,48)), layers, rotation=80, fontsize=8)
 plt.xlabel("Layer")
 plt.ylabel("Correlation")
-plt.title("InceptionV3: Body parts vs. tools correlations")
-plt.legend(("Corr: bodies vs. tools", "Corr: hands vs. tools", "Corr: faces vs. tools"), loc='lower left')
+plt.title("Correlation between different body parts and tools in InceptionV3 layers")
+plt.legend(("bodies", "hands", "faces"), loc='lower left')
 plt.show()
 
 # Man
@@ -355,11 +393,12 @@ plt.plot(corr_hands_objects[:,2],'-o')
 plt.plot(corr_faces_objects[:,2],'-o')
 plt.grid()
 plt.ylim((0,1))
-plt.xticks(list(range(0,48)), list(range(1,49)))
+# plt.xticks(list(range(0,48)), list(range(1,49)))
+plt.xticks(list(range(0,48)), layers, rotation=80, fontsize=8)
 plt.xlabel("Layer")
 plt.ylabel("Correlation")
-plt.title("InceptionV3: Body parts vs. manipulable objects correlations")
-plt.legend(("Corr: bodies vs. man", "Corr: hands vs. man", "Corr: faces vs. man"), loc='lower left')
+plt.title("Correlation between different body parts and manipulable objects in InceptionV3 layers")
+plt.legend(("bodies", "hands", "faces"), loc='lower left')
 plt.show()
 
 # NMan
@@ -368,17 +407,75 @@ plt.plot(corr_hands_objects[:,3],'-o')
 plt.plot(corr_faces_objects[:,3],'-o')
 plt.grid()
 plt.ylim((0,1))
-plt.xticks(list(range(0,48)), list(range(1,49)))
+# plt.xticks(list(range(0,48)), list(range(1,49)))
+plt.xticks(list(range(0,48)), layers, rotation=80, fontsize=8)
 plt.xlabel("Layer")
 plt.ylabel("Correlation")
-plt.title("InceptionV3: Body parts vs. nonmanipulable objects correlations")
-plt.legend(("Corr: bodies vs. Nman", "Corr: hands vs. Nman", "Corr: faces vs. Nman"), loc='lower left')
+plt.title("Correlation between different body parts and nonmanipulable objects in InceptionV3 layers")
+plt.legend(("bodies", "hands", "faces"), loc='lower left')
+plt.show()
+
+#%% Plot all
+
+fig = plt.figure()
+fig.suptitle("INCEPTION V3")
+# 1
+plt.subplot(2,2,1)
+plt.plot(corr_bodies_objects[:,0],'-o')
+plt.plot(corr_hands_objects[:,0],'-o')
+plt.plot(corr_faces_objects[:,0],'-o')
+plt.grid()
+plt.ylim((0,1))
+plt.xticks(list(range(0,48)), list(range(1,49)), fontsize=6)
+# plt.xticks(list(range(0,48)), layers, rotation=80, fontsize=8)
+plt.ylabel("Correlation")
+plt.title("Correlation between different body parts and objects\n(tools + manipulable + nonmanipulable) in InceptionV3 layers")
+plt.legend(("bodies", "hands", "faces"), loc='lower left')
+plt.show()
+# 2
+plt.subplot(2,2,2)
+plt.plot(corr_bodies_objects[:,1],'-o')
+plt.plot(corr_hands_objects[:,1],'-o')
+plt.plot(corr_faces_objects[:,1],'-o')
+plt.grid()
+plt.ylim((0,1))
+plt.xticks(list(range(0,48)), list(range(1,49)), fontsize=6)
+# plt.xticks(list(range(0,48)), layers, rotation=80, fontsize=8)
+plt.ylabel("Correlation")
+plt.title("Correlation between different body parts and tools in InceptionV3 layers")
+plt.legend(("bodies", "hands", "faces"), loc='lower left')
+plt.show()
+# 3
+plt.subplot(2,2,3)
+plt.plot(corr_bodies_objects[:,2],'-o')
+plt.plot(corr_hands_objects[:,2],'-o')
+plt.plot(corr_faces_objects[:,2],'-o')
+plt.grid()
+plt.ylim((0,1))
+plt.xticks(list(range(0,48)), list(range(1,49)), fontsize=6)
+# plt.xticks(list(range(0,48)), layers, rotation=80, fontsize=8)
+plt.ylabel("Correlation")
+plt.title("Correlation between different body parts and manipulable objects in InceptionV3 layers")
+plt.legend(("bodies", "hands", "faces"), loc='lower left')
+plt.show()
+# 4
+plt.subplot(2,2,4)
+plt.plot(corr_bodies_objects[:,3],'-o')
+plt.plot(corr_hands_objects[:,3],'-o')
+plt.plot(corr_faces_objects[:,3],'-o')
+plt.grid()
+plt.ylim((0,1))
+plt.xticks(list(range(0,48)), list(range(1,49)), fontsize=6)
+# plt.xticks(list(range(0,48)), layers, rotation=80, fontsize=8)
+plt.ylabel("Correlation")
+plt.title("Correlation between different body parts and nonmanipulable objects in InceptionV3 layers")
+plt.legend(("bodies", "hands", "faces"), loc='lower left')
 plt.show()
 
 #%% ##### Confusion matrices for another analysis #####
 
 #%% Big matrices
-
+    
 # corr_matrices = []
 for _ in range(0, 1): # Change this
     corr_matrices.append(np.corrcoef(feature_maps[_]))
@@ -424,24 +521,34 @@ with open('corr_M_small', 'wb') as f:
     pickle.dump(corr_matrices_small, f)
     
 #%% Visualize the results
+
+import pickle
+import matplotlib.pyplot as plt
+with open('corr_M', 'rb') as handle:
+    corr_matrices = pickle.load(handle)
     
 # Big matrices
 fig = plt.figure()
-fig.suptitle("InceptionV3: 48 stimuli per condition\n Bodies, faces, hands, tools, manipulable objects, nonmanipulable objects, chairs")
+fig.suptitle("InceptionV3\n Bodies, faces, hands, tools, manipulable objects, nonmanipulable objects, chairs")
 for _ in range(0, len(corr_matrices)):
     plt.subplot(6,8,_+1)
-    plt.imshow(corr_matrices[_],cmap="cividis")
+#    plt.imshow(corr_matrices[_],cmap="cividis")
+    plt.imshow(corr_matrices[_])
     plt.colorbar()
     plt.axis("off")
     plt.title(str(_+1), fontsize=6)
 plt.show()    
 
+with open('corr_M_small', 'rb') as handle:
+    corr_matrices_small = pickle.load(handle)
+    
 # Small matrices
 fig = plt.figure()
-fig.suptitle("InceptionV3: Every condition is averaged\n Bodies, faces, hands, tools, manipulable objects, nonmanipulable objects, chairs")
+fig.suptitle("InceptionV3\nEvery condition is averaged\n Bodies, faces, hands, tools, manipulable objects, nonmanipulable objects, chairs")
 for _ in range(0, len(corr_matrices_small)):
     plt.subplot(6,8,_+1)
-    plt.imshow(corr_matrices_small[_], cmap="cividis")
+    plt.imshow(corr_matrices_small[_],cmap="cividis")
+#    plt.imshow(corr_matrices_small[_])    
     plt.colorbar()
     plt.axis("off")
     plt.title(str(_+1), fontsize=6)
@@ -450,10 +557,12 @@ plt.show()
 #%% Checking the last layer
 
 feature_maps = []
-output = pre_trained_model.get_layer('predictions').output
+output = pre_trained_model.get_layer('mixed10').output
 model = Model(pre_trained_model.input, output)
 feature_maps.append(model.predict(images))
 _ = 0
+print(feature_maps[_].shape) 
+feature_maps[_] = feature_maps[_].reshape((336,-1))
 print(feature_maps[_].shape) 
 co = np.corrcoef(feature_maps[_])
 plt.imshow(co)
