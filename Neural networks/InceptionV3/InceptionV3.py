@@ -357,7 +357,7 @@ c = [_[:-1] for _ in c]
 c = [val for sublist in c for val in sublist]
 
 layers = ["conv1", "conv2", "conv3", "conv4", "conv5"] + a + norm1 + b + norm2 + c
-layers.append("pred")
+layers.append("FC")
 
 del a, b, c, norm1, norm2
 
