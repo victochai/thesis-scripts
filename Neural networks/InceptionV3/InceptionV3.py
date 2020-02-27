@@ -48,6 +48,10 @@ preprocess_input(images)
 del height, width, image, nchannels, filenames
 !cls
 
+#import scipy.io
+#imagesV3 = {'imagesV3' : images}
+#scipy.io.savemat('imagesV3.mat', imagesV3)
+
 #%% InceptionV3
 
 pre_trained_model = InceptionV3(input_shape = (299, 299, 3), include_top = True, weights = 'imagenet')
@@ -262,15 +266,15 @@ objects = []
 chairs = []
 
 # Correlations
-# corr_bodies_objects = np.zeros((48,4))
-# corr_hands_objects = np.zeros((48,4))
-# corr_faces_objects = np.zeros((48,4))
+corr_bodies_objects = np.zeros((48,4))
+corr_hands_objects = np.zeros((48,4))
+corr_faces_objects = np.zeros((48,4))
 # Shape = (48 correlations for each layer, body parts vs. objects,
 #                                           body parts vs. tools,
 #                                           body parts vs. man,
 #                                           body parts vs. nman)
 
-k = 47 # Change this
+k = 0 # Change this
 
 for _ in range(0,1): 
     
@@ -353,7 +357,7 @@ c = [_[:-1] for _ in c]
 c = [val for sublist in c for val in sublist]
 
 layers = ["conv1", "conv2", "conv3", "conv4", "conv5"] + a + norm1 + b + norm2 + c
-layers.append("avg_pool")
+layers.append("pred")
 
 del a, b, c, norm1, norm2
 
@@ -496,7 +500,7 @@ for _ in range(0, 1): # Change this
             ))
     del bodies, hands, faces, tools, man, nman, chairs
     
-# corr_matrices_small = [] 
+corr_matrices_small = [] 
 for _ in range(0, 1): # Change this
     corr_matrices_small.append(np.corrcoef(feature_maps_small[_].T))
 
@@ -524,8 +528,16 @@ with open('corr_M_small', 'wb') as f:
 
 import pickle
 import matplotlib.pyplot as plt
+import scipy.io
+import numpy as np
+
 with open('corr_M', 'rb') as handle:
     corr_matrices = pickle.load(handle)
+co = scipy.io.loadmat("co.mat")    
+co = co["co"]
+del corr_matrices[47]
+corr_matrices.append(co)
+
     
 # Big matrices
 fig = plt.figure()
@@ -541,14 +553,18 @@ plt.show()
 
 with open('corr_M_small', 'rb') as handle:
     corr_matrices_small = pickle.load(handle)
+co_small = scipy.io.loadmat("co_small.mat")    
+co_small = co_small["co_small"]
+del corr_matrices_small[47]
+corr_matrices_small.append(co_small)
     
 # Small matrices
 fig = plt.figure()
 fig.suptitle("InceptionV3\nEvery condition is averaged\n Bodies, faces, hands, tools, manipulable objects, nonmanipulable objects, chairs")
 for _ in range(0, len(corr_matrices_small)):
     plt.subplot(6,8,_+1)
-    plt.imshow(corr_matrices_small[_],cmap="cividis")
-#    plt.imshow(corr_matrices_small[_])    
+#    plt.imshow(corr_matrices_small[_],cmap="cividis")
+    plt.imshow(corr_matrices_small[_])    
     plt.colorbar()
     plt.axis("off")
     plt.title(str(_+1), fontsize=6)
