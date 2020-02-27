@@ -194,6 +194,3 @@ for _ in range(0, len(mat)):
     plt.axis("off")
     plt.title(str(_+1), fontsize=6)
 plt.show()    
-
-
-
