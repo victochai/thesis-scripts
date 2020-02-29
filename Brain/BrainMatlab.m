@@ -139,6 +139,6 @@ xtickangle(45)
 
 %% Save
 
-save("hand", "hand")
-save("body", "body")
-save("face", "face")
+save("hand_right", "hand")
+save("body_right", "body")
+save("face_right", "face")
