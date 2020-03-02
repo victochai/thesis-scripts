@@ -692,3 +692,109 @@ plt.axis("off")
 plt.title("Calc. cort. + Occip. pole")
 
 plt.show()
+
+#%% Visualizing decodings
+
+work_dir = r"C:\Users\victo\Desktop\thesis-scripts\Brain\Brain representations"
+os.chdir(work_dir)
+conf_matrices = scipy.io.loadmat(r"decodings_all_confusion_matrix.mat")["confusion_matrix_mean"]
+
+fig = plt.figure()
+fig.suptitle("LDA decodings\nBody, hand, face, tool, man, nman, chair")
+
+plt.subplot(2,4,1)
+plt.imshow(conf_matrices[:,:,0])
+plt.colorbar()
+plt.axis("off")
+plt.title("ITG + Anterior IOG")
+
+plt.subplot(2,4,2)
+plt.imshow(conf_matrices[:,:,1])
+plt.colorbar()
+plt.axis("off")
+plt.title("ITG + Anterior IOG (left)")
+
+plt.subplot(2,4,3)
+plt.imshow(conf_matrices[:,:,2])
+plt.colorbar()
+plt.axis("off")
+plt.title("ITG + Anterior IOG (right)")
+
+plt.subplot(2,4,5)
+plt.imshow(conf_matrices[:,:,3])
+plt.colorbar()
+plt.axis("off")
+plt.title("Posterior IOG")
+
+plt.subplot(2,4,6)
+plt.imshow(conf_matrices[:,:,4])
+plt.colorbar()
+plt.axis("off")
+plt.title("Calcarine cortex")
+
+plt.subplot(2,4,7)
+plt.imshow(conf_matrices[:,:,5])
+plt.colorbar()
+plt.axis("off")
+plt.title("Occipital pole")
+
+plt.subplot(2,4,8)
+plt.imshow(conf_matrices[:,:,6])
+plt.colorbar()
+plt.axis("off")
+plt.title("Calc. cort. + Occip. pole")
+
+plt.show()
+
+#%% Visualizing decodings | OBJECTS
+
+work_dir = r"C:\Users\victo\Desktop\thesis-scripts\Brain\Brain representations"
+os.chdir(work_dir)
+conf_matrices = scipy.io.loadmat(r"decodings_objects_confusion_matrix.mat")["confusion_matrix_mean"]
+
+fig = plt.figure()
+fig.suptitle("LDA object decodings\nTool, man, nman\n")
+
+plt.subplot(2,4,1)
+plt.imshow(conf_matrices[:,:,0])
+plt.colorbar()
+plt.axis("off")
+plt.title("ITG + Anterior IOG")
+
+plt.subplot(2,4,2)
+plt.imshow(conf_matrices[:,:,1])
+plt.colorbar()
+plt.axis("off")
+plt.title("ITG + Anterior IOG (left)")
+
+plt.subplot(2,4,3)
+plt.imshow(conf_matrices[:,:,2])
+plt.colorbar()
+plt.axis("off")
+plt.title("ITG + Anterior IOG (right)")
+
+plt.subplot(2,4,5)
+plt.imshow(conf_matrices[:,:,3])
+plt.colorbar()
+plt.axis("off")
+plt.title("Posterior IOG")
+
+plt.subplot(2,4,6)
+plt.imshow(conf_matrices[:,:,4])
+plt.colorbar()
+plt.axis("off")
+plt.title("Calcarine cortex")
+
+plt.subplot(2,4,7)
+plt.imshow(conf_matrices[:,:,5])
+plt.colorbar()
+plt.axis("off")
+plt.title("Occipital pole")
+
+plt.subplot(2,4,8)
+plt.imshow(conf_matrices[:,:,6])
+plt.colorbar()
+plt.axis("off")
+plt.title("Calc. cort. + Occip. pole")
+
+plt.show()
