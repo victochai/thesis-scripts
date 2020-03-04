@@ -5,7 +5,7 @@ import os
 
 #%% Mat
 
-mat = scipy.io.loadmat('correlations_VGG_2.mat')
+mat = scipy.io.loadmat('correlations_VGG_original.mat')
 mat = mat["correlations_VGG"]
 
 body_objects = []
@@ -92,7 +92,7 @@ plt.show()
 #%% All plots
 
 fig = plt.figure()
-fig.suptitle("VGG19")
+fig.suptitle("VGG19 | ORIGINAL IMAGES")
 # 1
 plt.subplot(2,2,1)
 for _ in range(0,3):

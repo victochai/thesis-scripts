@@ -40,7 +40,7 @@ del a, b, c, norm1, norm2
 
 #%% Correlations between body parts and objects
 
-mat = scipy.io.loadmat('correlations_INC.mat')
+mat = scipy.io.loadmat('correlations_INC_original.mat')
 mat = mat["correlations_INC"]
 
 body_objects = []
@@ -111,7 +111,7 @@ plt.show()
 #%% Plot all
 
 fig = plt.figure()
-fig.suptitle("INCEPTION V3")
+fig.suptitle("INCEPTION V3 | ORIGINAL IMAGES")
 # 1
 plt.subplot(2,2,1)
 for _ in range(0,3):

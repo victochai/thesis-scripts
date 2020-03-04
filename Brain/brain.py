@@ -80,11 +80,11 @@ brain_regions = [
         "calc. cortex", 
         "occip. pole",
         "post. IOG",
-        "ITG + ant. IOG (right)"
+        "ITG + ant. IOG (left)"
         ]
-body = scipy.io.loadmat("body_right.mat")["body"]
-hand = scipy.io.loadmat("hand_right.mat")["hand"]
-face = scipy.io.loadmat("face_right.mat")["face"]
+body = scipy.io.loadmat("body_left.mat")["body"]
+hand = scipy.io.loadmat("hand_left.mat")["hand"]
+face = scipy.io.loadmat("face_left.mat")["face"]
 
 # Objects
 plt.plot(body[0,:],'-o')

@@ -6,9 +6,15 @@
 
 clc, clear
 cd('D:\THESIS\DATA\DATA. CAT12');
-load('images.mat'); 
+load('images_forDNN.mat');
+images = images_forDNN;
+clear images_forDNN
 images = permute(images, [2, 3, 4, 1]);
 disp(size(images)); % for Alexnet (227, 227, 3, 336) or (width, height, rgb_channels, n_samples)
+
+%% Imresize if necessary
+
+images = uint8(imresize(images, [299 299]));
 
 %% Net
 
@@ -82,7 +88,7 @@ correlations_nman_AlEX = {corr_body_nman; corr_hand_nman; corr_face_nman}
 correlations_AlEX = {correlations_objects_AlEX; correlations_tools_AlEX; ...
                     correlations_man_AlEX; correlations_nman_AlEX}
 
-save('correlations_AlEX', 'correlations_AlEX')
+save('correlations_ALEX_original', 'correlations_AlEX')
 
 %% Plot (objects)
 

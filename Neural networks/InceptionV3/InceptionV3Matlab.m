@@ -43,6 +43,7 @@ for i = 86
     % size(feature_map)  % should be [h w ch m] for conv and [1 1 num.of.neurons m] for fc
     feature_map = reshape(feature_map, [size(feature_map,1)*size(feature_map, 2)*size(feature_map, 3), size(feature_map, 4)]);
     size(feature_map)  % data is now vectorized 
+    
 end
 
 %% For concat (2)
@@ -83,7 +84,7 @@ end
 feature_map = vertcat(c{i-3,1},c{i-2,1},c{i-1,1},c{i,1});
 clear i c
 
-%% For concat 1 (5)
+%% For concat 1 (6)
 
 layers{89:94, 1}
 
@@ -99,7 +100,7 @@ for i = 89:94
     
 end
 
-feature_map = vertcat(c{i-4,1},c{i-3,1},c{i-2,1},c{i-1,1},c{i,1});
+feature_map = vertcat(c{i-5,1},c{i-4,1},c{i-3,1},c{i-2,1},c{i-1,1},c{i,1});
 clear i c
 
 %% Last layer
@@ -111,11 +112,12 @@ size(feature_map)  % should be [h w ch m] for conv and [1 1 num.of.neurons m] fo
 
 %% F MAPS 
 
-for i = 48
+for i = 47
     
     % Co-s
 
     co = corr(feature_map);
+    cos{i} = co;
 
     body(1:size(feature_map, 1), 1) = mean(feature_map(1:size(feature_map, 1), 1:48), 2);
     hand(1:size(feature_map, 1), 1) = mean(feature_map(1:size(feature_map, 1), 49:96), 2);
@@ -134,6 +136,7 @@ for i = 48
     matrix(:, 7) = chair;
 
     co_small = corr(matrix);
+    coS_small{i} = co_small
     
     objects = mean([tool, man, nonman], 2);
     
@@ -157,11 +160,11 @@ for i = 48
     corr_hand_nman(i, 1) = corr(hand, nonman);
     corr_face_nman(i, 1) = corr(face, nonman);
     
-    text = ["conv2d_" + i + "_pred"]
+    text = ["conv2d_" + i + "_MC"]
     save(text, "feature_map");
-    text = ["co_" + "conv2d_" + i + "_pred"]
+    text = ["co_" + "conv2d_" + i + "_MC"]
     save(text, "co");
-    text = ["co_small_" + "conv2d_" + i + "_pred"]
+    text = ["co_small_" + "conv2d_" + i + "_MC"]
     save(text, "co_small");
     
     clear matrix body face hand tool man nonman chair feature_map i co co_small
@@ -178,3 +181,14 @@ correlations_INC = {correlations_objects_INC; correlations_tools_INC; ...
                     correlations_man_INC; correlations_nman_INC}
 
 save('correlations_INC', 'correlations_INC')
+
+%%
+
+corr_face_nman = correlations_INC{4,1}{3,1}
+corr_face_nman(44,1) = corr_face_nman_1(44,1)
+corr_face_nman(47,1) = corr_face_nman_1(47,1)
+
+
+
+
+

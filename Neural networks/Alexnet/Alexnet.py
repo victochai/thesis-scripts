@@ -6,7 +6,7 @@ import os
 
 #%% Mat
 
-mat = scipy.io.loadmat('correlations_alex_2.mat')
+mat = scipy.io.loadmat('correlations_ALEX_original.mat')
 mat = mat["correlations_AlEX"]
 
 body_objects = []
@@ -80,7 +80,7 @@ plt.legend(("bodies", "hands", "faces"), loc='lower left')
 #%% All plots
 
 fig = plt.figure()
-fig.suptitle("ALEXNET")
+fig.suptitle("ALEXNET | ORIGINAL IMAGES")
 # 1
 plt.subplot(2,2,1)
 for _ in range(0,3):
@@ -177,6 +177,3 @@ for _ in range(0, len(conv_matrices)):
     plt.axis("off")
     plt.title(str(_+1), fontsize=9)
 plt.show()  
-
-
-
