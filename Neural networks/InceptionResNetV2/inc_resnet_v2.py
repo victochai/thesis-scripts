@@ -105,5 +105,13 @@ for _ in range(0, len(l)):
 #    plt.colorbar()
     plt.axis("off")
 #    plt.title(str(_+1), fontsize=9)
-plt.show()          
+plt.show()  
+
+#%% Body parts vs. Objects
+
+a = cos_small[0]
+
+
+
+        
                
