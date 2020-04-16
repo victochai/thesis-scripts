@@ -1,18 +1,22 @@
 images/
 imagesV3.mat
-Neural networks/InceptionV3/OLD, probably wrong/
+Neural networks/InceptionV3/Old analysis/
 Neural networks/InceptionV3/Conv big/
 Neural networks/InceptionV3/Conv small/
 Neural networks/InceptionV3/Correlations. Body parts and objects/
-Neural networks/Alexnet/OLD, probably wrong/
+Neural networks/Alexnet/Old analysis/
 Neural networks/Alexnet/Conv Big/
 Neural networks/Alexnet/Conv Small/
 Neural networks/Alexnet/Correlations. Body parts and objects/
-Neural networks/VGG19/OLD, probably wrong/
+Neural networks/VGG19/Old analysis/
 Neural networks/VGG19/Conv big/
 Neural networks/VGG19/Conv small/
 Neural networks/VGG19/Correlations. Body parts and objects/
 Brain/Brain representations/
+Neural networks/InceptionResNetV2/Conv small/
+Neural networks/InceptionResNetV2/Conv big/
+Neural networks/ResNet50/Conv small/
+Neural networks/ResNet50/Conv big/
 *.asv
 Brain/Images/
 

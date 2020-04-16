@@ -1,7 +1,7 @@
 %% Important info
 
 clc, clear
-net = inceptionresnetv2;
+net1 = inceptionresnetv2;
 cd("D:\thesis-scripts")
 load("imagesV3.mat")
 images = permute(imagesV3, [2, 3, 4, 1]);

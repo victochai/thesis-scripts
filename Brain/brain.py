@@ -8,26 +8,30 @@ import scipy.io
 #%% Brain representations + Nets
 
 # Brain
-work_dir = r"C:\Users\victo\Desktop\thesis-scripts\Brain\Brain representations"
+work_dir = r"D:\thesis-scripts\Brain\Brain representations"
 os.chdir(work_dir)
 ant = scipy.io.loadmat("anterior_big_MATRIX.mat")["anterior_big_MATRIX"]
 ant_left = scipy.io.loadmat("anterior_left.mat")["anterior_left"]
 ant_right = scipy.io.loadmat("anterior_right.mat")["anterior_right"]
+new = scipy.io.loadmat("new.mat")["new"]
 
 # Inception
 inception_dir = r"C:\Users\victo\Desktop\thesis-scripts\Neural networks\InceptionV3\Conv small"
 os.chdir(inception_dir)
-inception = scipy.io.loadmat("co_small_conv2d_48_pred.mat")["co_small"]
+inception = scipy.io.loadmat("co_conv2d_48_pred.mat")["co"]
 
 # Alexnet
 alexnet_dir = r"C:\Users\victo\Desktop\thesis-scripts\Neural networks\Alexnet\Conv Small"
 os.chdir(alexnet_dir)
-alexnet = scipy.io.loadmat(r"fc8_co_small.mat")["fc8_co_small"]
+alexnet = scipy.io.loadmat(r"fc8_co.mat")["fc8_co"]
 
 # VGG19
 vgg_dir = r"C:\Users\victo\Desktop\thesis-scripts\Neural networks\VGG19\Conv small"
 os.chdir(vgg_dir)
-vgg19 = scipy.io.loadmat(r"fc8_co_small.mat")["fc8_co_small"]
+vgg19 = scipy.io.loadmat(r"fc8.mat")["fc8"]
+
+
+inception = 
 
 os.chdir(work_dir)
 
