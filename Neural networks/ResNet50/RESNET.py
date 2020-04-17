@@ -6,21 +6,21 @@ import matplotlib.pyplot as plt
 
 #%% CONV BIG
 
-os.chdir(r"D:\thesis-scripts\Neural networks\ResNet50\Conv big")
+os.chdir(r"D:\thesis-scripts\Neural networks\ResNet101\Conv big")
 cos = []
 l = os.listdir()
 for _ in l:
     cos.append(scipy.io.loadmat(_)["co"]) 
 
 fig = plt.figure()
-fig.suptitle("ResNet50\n Bodies, faces, hands, tools, manipulable objects, nonmanipulable objects, chairs")
+fig.suptitle("ResNet101\n Bodies, faces, hands, tools, manipulable objects, nonmanipulable objects, chairs")
 for _ in range(0, len(l)):
-    plt.subplot(5,10,_+1)
+    plt.subplot(8,13,_+1)
 #    plt.imshow(corr_matrices[_],cmap="cividis")
     plt.imshow(cos[_])
-    plt.colorbar()
+#    plt.colorbar()
     plt.axis("off")
-    plt.title(str(_+1), fontsize=9)
+#    plt.title(str(_+1), fontsize=5)
 plt.show() 
 
 #%% CONV SMALL
@@ -43,12 +43,12 @@ for co in cos:
 del co, small, x, x_ind, y, y_ind
 
 fig = plt.figure()
-fig.suptitle("ResNet50\nEvery condition is averaged\n Bodies, faces, hands, tools, manipulable objects, nonmanipulable objects, chairs")
+fig.suptitle("ResNet101\nEvery condition is averaged\n Bodies, faces, hands, tools, manipulable objects, nonmanipulable objects, chairs")
 for _ in range(0, len(l)):
-    plt.subplot(5,10,_+1)
+    plt.subplot(8,13,_+1)
 #    plt.imshow(corr_matrices[_],cmap="cividis")
     plt.imshow(cos_small[_])
-    plt.colorbar()
+#    plt.colorbar()
     plt.axis("off")
-    plt.title(str(_+1), fontsize=9)
+#    plt.title(str(_+1), fontsize=9)
 plt.show() 

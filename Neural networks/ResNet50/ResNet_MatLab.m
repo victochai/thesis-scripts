@@ -1,7 +1,13 @@
-%% Prepare
+%% Prepare | RESNET50 
 
 clc, clear
 net = resnet50;
+% deepNetworkDesigner % So, yes, it is 50 layers
+
+%% RESNET 101
+
+clc, clear
+net = resnet101;
 % deepNetworkDesigner % So, yes, it is 50 layers
 
 %% Layers | Images
@@ -22,7 +28,10 @@ clear layers
 layers = {}
 for i = 1:numel(l)
     a = l{i, 1}
-    ans = regexp(a, "conv1$|fc1000$|res\d\w_branch\d\w$|fc1000$")
+    % For ResNet101
+    ans = regexp(a, "conv1$|fc1000$|res\d\w_branch\d\w$|fc1000$|res\d\w\d_branch\d\w$|res\d\w\d\d_branch\d\w$")
+    % For ResNet50
+    % ans = regexp(a, "conv1$|fc1000$|res\d\w_branch\d\w$|fc1000$|")
     if ans == 1
         layers{i, 1} = l{i, 1}
     end       
@@ -35,7 +44,7 @@ clear a ans i % Should be 50 layers
 
 cd("D:\thesis-scripts\Neural networks\ResNet50")
 
-for i = 10:50
+for i = 54:101
     
     disp(layers{i});
     feature_map = activations(net, images, layers{i});
@@ -59,10 +68,10 @@ for i = 10:50
     matrix(:, 7) = chair;
 
     co_small = corr(matrix);
-    cos_small{i} = co_small
+    % cos_small{i} = co_small
     
     co = corr(feature_map);
-    cos{i} = co;
+    % cos{i} = co;
         
     text = ["co_" + "conv2d_" + i + "_" + layers{i}] % CHANGE
     save(text, "co");

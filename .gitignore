@@ -17,6 +17,8 @@ Neural networks/InceptionResNetV2/Conv small/
 Neural networks/InceptionResNetV2/Conv big/
 Neural networks/ResNet50/Conv small/
 Neural networks/ResNet50/Conv big/
+Neural networks/ResNet101/Conv small/
+Neural networks/ResNet101/Conv big/
 *.asv
 Brain/Images/
 
