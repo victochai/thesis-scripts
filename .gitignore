@@ -19,6 +19,9 @@ Neural networks/ResNet50/Conv small/
 Neural networks/ResNet50/Conv big/
 Neural networks/ResNet101/Conv small/
 Neural networks/ResNet101/Conv big/
+Neural networks/Densenet201/Conv small/
+Neural networks/Densenet201/Conv small, different averaging/
+Neural networks/Densenet201/Conv big/
 *.asv
 Brain/Images/
 
