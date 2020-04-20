@@ -42,16 +42,16 @@ layer_outputs = [layer.output for layer in pre_trained_model.layers]
 
 #%% Loading .Mat files
 
-os.chdir(r"D:\inception_resnet_v2\co\stem")
+os.chdir(r"D:\thesis-scripts\Neural networks\InceptionResNetV2\Conv big\stem")
 l1 = os.listdir()
 
-os.chdir(r"D:\inception_resnet_v2\co\first 100")
+os.chdir(r"D:\thesis-scripts\Neural networks\InceptionResNetV2\Conv big\first 100")
 l2 = os.listdir()
 
-os.chdir(r"D:\inception_resnet_v2\co\last 100")
+os.chdir(r"D:\thesis-scripts\Neural networks\InceptionResNetV2\Conv big\last 100")
 l3 = os.listdir()
 
-os.chdir(r"D:\inception_resnet_v2\co\last 2")
+os.chdir(r"D:\thesis-scripts\Neural networks\InceptionResNetV2\Conv big\last 2")
 l4 = os.listdir()
 
 l = l1+l2+l3+l4

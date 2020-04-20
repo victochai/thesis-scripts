@@ -42,9 +42,9 @@ clear a ans i % Should be 50 layers
 
 %% Feature maps
 
-cd("D:\thesis-scripts\Neural networks\ResNet50")
+cd("D:\thesis-scripts\Neural networks\ResNet101")
 
-for i = 54:101
+for i = 100:101
     
     disp(layers{i});
     feature_map = activations(net, images, layers{i});
@@ -73,9 +73,9 @@ for i = 54:101
     co = corr(feature_map);
     % cos{i} = co;
         
-    text = ["co_" + "conv2d_" + i + "_" + layers{i}] % CHANGE
+    text = ["co_" + "orig_" + i + "_" + layers{i}] % CHANGE
     save(text, "co");
-    text = ["co_small_" + "conv2d_" + i + "_"+ layers{i}] % CHANGE
+    text = ["co_small_" + "orig_" + i + "_"+ layers{i}] % CHANGE
     save(text, "co_small");
     
     clear feature_map body hand face man nonman tool chair co co_small matrix

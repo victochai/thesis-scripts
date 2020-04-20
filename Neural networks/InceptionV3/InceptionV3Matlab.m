@@ -35,9 +35,9 @@ clear a ans i l
 
 % cd("C:\Users\victo\Desktop\nns_for_thesis")
 
-layers{86}
+layers{2}
 
-for i = 86
+for i = 2
     
     feature_map = activations(net, images, layers{i});
     % size(feature_map)  % should be [h w ch m] for conv and [1 1 num.of.neurons m] for fc
@@ -112,12 +112,12 @@ size(feature_map)  % should be [h w ch m] for conv and [1 1 num.of.neurons m] fo
 
 %% F MAPS 
 
-for i = 47
+for i = 2
     
     % Co-s
 
     co = corr(feature_map);
-    cos{i} = co;
+    % cos{i} = co;
 
     body(1:size(feature_map, 1), 1) = mean(feature_map(1:size(feature_map, 1), 1:48), 2);
     hand(1:size(feature_map, 1), 1) = mean(feature_map(1:size(feature_map, 1), 49:96), 2);
@@ -136,35 +136,13 @@ for i = 47
     matrix(:, 7) = chair;
 
     co_small = corr(matrix);
-    coS_small{i} = co_small
+    % coS_small{i} = co_small
     
-    objects = mean([tool, man, nonman], 2);
-    
-    % Correlations Objects
-    corr_body_objects(i, 1) = corr(body, objects);
-    corr_hand_objects(i, 1) = corr(hand, objects);
-    corr_face_objects(i, 1) = corr(face, objects);
-
-    % Tools
-    corr_body_tools(i, 1) = corr(body, tool);
-    corr_hand_tools(i, 1) = corr(hand, tool);
-    corr_face_tools(i, 1) = corr(face, tool);
-
-    % Man
-    corr_body_man(i, 1) = corr(body, man);
-    corr_hand_man(i, 1) = corr(hand, man);
-    corr_face_man(i, 1) = corr(face, man);
-
-    % Nman
-    corr_body_nman(i, 1) = corr(body, nonman);
-    corr_hand_nman(i, 1) = corr(hand, nonman);
-    corr_face_nman(i, 1) = corr(face, nonman);
-    
-    text = ["conv2d_" + i + "_MC"]
-    save(text, "feature_map");
-    text = ["co_" + "conv2d_" + i + "_MC"]
+    % text = ["conv2d_" + i + "_STEM"]
+    % save(text, "feature_map");
+    text = ["co_" + "ORIG_" + 0 + i + "_STEM"]
     save(text, "co");
-    text = ["co_small_" + "conv2d_" + i + "_MC"]
+    text = ["co_small_" + "ORIG_" + 0 + i + "_STEM"]
     save(text, "co_small");
     
     clear matrix body face hand tool man nonman chair feature_map i co co_small

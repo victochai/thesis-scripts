@@ -6,11 +6,19 @@ net = densenet201;
 
 %% Layers | Images
 
-cd("D:\THESIS\DATA\DATA. CAT12")
-load("images_vgg19.mat")
-images = permute(images_vgg, [2, 3, 4, 1]);
-disp(size(images));
-clear images_vgg
+cd('D:\thesis-scripts\images');
+load('images_forDNN.mat');
+images = images_forDNN;
+clear images_forDNN
+images = permute(images, [2, 3, 4, 1]);
+disp(size(images)); % (400, 400, 3, 336) or (width, height, rgb_channels, n_samples)
+images = uint8(imresize(images, [299 299]));
+
+% cd("D:\THESIS\DATA\DATA. CAT12")
+% load("images_vgg19.mat")
+% images = permute(images_vgg, [2, 3, 4, 1]);
+% disp(size(images));
+% clear images_vgg
 
 layers = net.Layers;
 l = {}
@@ -32,13 +40,13 @@ for i = 1:numel(l)
 end
 
 layers = layers(~cellfun('isempty', layers))
-clear a ans i % Should be 50 layers
+clear a ans i % Should be 201 layers
 
 %% Feature maps
 
 cd("D:\thesis-scripts\Neural networks\Densenet201")
 
-for i = 136:201
+for i = 100:201
     
     disp(layers{i});
     feature_map = activations(net, images, layers{i});
@@ -67,9 +75,9 @@ for i = 136:201
     co = corr(feature_map);
     % cos{i} = co;
         
-    text = ["co_" + "conv2d_" + i + "_" + layers{i}] % CHANGE
+    text = ["co_orig_" + i + "_" + layers{i}] % CHANGE
     save(text, "co");
-    text = ["co_small_" + "conv2d_" + i + "_"+ layers{i}] % CHANGE
+    text = ["co_small_orig_" + i + "_" + layers{i}] % CHANGE
     save(text, "co_small");
     
     clear feature_map body hand face man nonman tool chair co co_small matrix

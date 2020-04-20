@@ -6,14 +6,14 @@ import matplotlib.pyplot as plt
 
 #%% CONV BIG
 
-os.chdir(r"D:\thesis-scripts\Neural networks\Densenet201\Conv big")
+os.chdir(r"D:\thesis-scripts\Neural networks\Densenet201\Original images\Conv big, original images")
 cos = []
 l = os.listdir()
 for _ in l:
     cos.append(scipy.io.loadmat(_)["co"]) 
     
 fig = plt.figure()
-fig.suptitle("DenseNet-201\n Bodies, faces, hands, tools, manipulable objects, nonmanipulable objects, chairs")
+fig.suptitle("DenseNet-201\nORIGINAL IMAGES\n Bodies, faces, hands, tools, manipulable objects, nonmanipulable objects, chairs")
 for _ in range(0, len(l)):
     plt.subplot(13,16,_+1)
 #    plt.imshow(corr_matrices[_],cmap="cividis")
@@ -43,7 +43,7 @@ for co in cos:
 del co, small, x, x_ind, y, y_ind
 
 fig = plt.figure()
-fig.suptitle("DenseNet-201\nEvery condition is averaged\n Bodies, faces, hands, tools, manipulable objects, nonmanipulable objects, chairs")
+fig.suptitle("DenseNet-201\nORIGINAL IMAGES\nEvery condition is averaged\n Bodies, faces, hands, tools, manipulable objects, nonmanipulable objects, chairs")
 for _ in range(0, len(l)):
     plt.subplot(13,16,_+1)
 #    plt.imshow(corr_matrices[_],cmap="cividis")

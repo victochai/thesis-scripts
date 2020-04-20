@@ -182,3 +182,32 @@ for _ in range(0, len(conv_matrices)):
     plt.axis("off")
     plt.title(str(_+1), fontsize=9)
 plt.show()  
+
+#%% Load shit
+
+os.chdir(r"D:\thesis-scripts\Neural networks\VGG19\Conv big")
+cos = []
+l = os.listdir()
+for _ in l:
+#    name = _.rstrip(".mat")
+#    cos.append(scipy.io.loadmat(_)[name])
+    cos.append(scipy.io.loadmat(_)['co'])
+    
+import numpy as np
+cos_small = []
+for co in cos:
+    x_ind = -48
+    y_ind = -48
+    small = np.zeros((7, 7))
+    for x in range(0, 7):
+        x_ind += 48
+        y_ind = - 48
+        for y in range(0, 7):
+            y_ind += 48
+            small[x, y] = np.mean(co[0+x_ind:48+x_ind, 0+y_ind:48+y_ind])
+    cos_small.append(small)
+del co, small, x, x_ind, y, y_ind
+    
+os.chdir(r"D:\thesis-scripts\Neural networks\VGG19\Conv small, different averaging")   
+cos_small = {"cos_small" : cos_small}
+scipy.io.savemat("cos_small.mat", cos_small)

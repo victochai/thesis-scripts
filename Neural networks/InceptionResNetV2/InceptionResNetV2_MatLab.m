@@ -1,7 +1,7 @@
 %% Important info
 
 clc, clear
-net1 = inceptionresnetv2;
+net = inceptionresnetv2;
 cd("D:\thesis-scripts")
 load("imagesV3.mat")
 images = permute(imagesV3, [2, 3, 4, 1]);
@@ -38,18 +38,17 @@ for i = 245 % CHANGE
     disp(layers{i})
     feature_map = activations(net, images, layers{i});
     size(feature_map)
-    % CHANGE
-    feature_maps{176, 1} = reshape(feature_map, [size(feature_map,1)*size(feature_map, 2)*size(feature_map, 3), size(feature_map, 4)]);
+    feature_map = reshape(feature_map, [size(feature_map,1)*size(feature_map, 2)*size(feature_map, 3), size(feature_map, 4)]);
     size(feature_map)
-    clear feature_map i
+    clear i
     
 end
 
 %% CONCAT 2
 
-layers{85:86, 1} % CHANGE
+layers{241:242, 1} % CHANGE
 
-for i = 85:86 % CHANGE
+for i = 241:242 % CHANGE
     
     layers{i}
     feature_map = activations(net, images, layers{i});
@@ -60,8 +59,8 @@ for i = 85:86 % CHANGE
     
 end
 
-feature_maps{1, 1} = vertcat(c{i-1,1},c{i,1}); % CHANGE
-clear i feature_map c
+feature_map = vertcat(c{i-1,1},c{i,1}); 
+clear i c
 
 %% CONCAT 3
 
@@ -78,8 +77,8 @@ for i = 191:193 % CHANGE
     
 end
 
-feature_maps{134, 1} = vertcat(c{i-2,1},c{i-1,1},c{i,1}); % CHANGE
-clear i c feature_map
+feature_map = vertcat(c{i-2,1},c{i-1,1},c{i,1}); 
+clear i c
 
 %% CONCAT 4
 
@@ -101,16 +100,14 @@ clear i c feature_map
 
 %% F MAPS 
 
-cd("D:\inception_resnet_v2")
+% cd("D:\inception_resnet_v2")
 
-for i = 1 % CHANGE
-    
-    feature_map = feature_maps{i, 1};
-    
+for i = 176 % CHANGE
+        
     % Co-s
 
     co = corr(feature_map);
-    cos{i} = co;
+    % cos{i} = co;
 
     body(1:size(feature_map, 1), 1) = mean(feature_map(1:size(feature_map, 1), 1:48), 2);
     hand(1:size(feature_map, 1), 1) = mean(feature_map(1:size(feature_map, 1), 49:96), 2);
@@ -129,14 +126,14 @@ for i = 1 % CHANGE
     matrix(:, 7) = chair;
 
     co_small = corr(matrix);
-    coS_small{i} = co_small;
+    % coS_small{i} = co_small;
     
     % text = ["conv2d_" + i + "_stem"]
     % save(text, "feature_map");
-    % text = ["co_" + "conv2d_" + i + "_pred"] % CHANGE
-    % save(text, "co");
-    % text = ["co_small_" + "conv2d_" + i + "_pred"] % CHANGE
-    % save(text, "co_small");
+    text = ["co_" + "orig_" + i + "_PRED"] % CHANGE
+    save(text, "co");
+    text = ["co_small_" + "orig_" + i + "_PRED"] % CHANGE
+    save(text, "co_small");
     
     clear matrix body face hand tool man nonman chair feature_map i co co_small
     

@@ -1,27 +1,32 @@
 images/
 imagesV3.mat
+
 Neural networks/InceptionV3/Old analysis/
-Neural networks/InceptionV3/Conv big/
-Neural networks/InceptionV3/Conv small/
-Neural networks/InceptionV3/Correlations. Body parts and objects/
+Neural networks/InceptionV3/Original images/
+Neural networks/InceptionV3/Experimental images/
+
 Neural networks/Alexnet/Old analysis/
-Neural networks/Alexnet/Conv Big/
-Neural networks/Alexnet/Conv Small/
-Neural networks/Alexnet/Correlations. Body parts and objects/
+Neural networks/Alexnet/Original images/
+Neural networks/Alexnet/Experimental images/
+
 Neural networks/VGG19/Old analysis/
-Neural networks/VGG19/Conv big/
-Neural networks/VGG19/Conv small/
-Neural networks/VGG19/Correlations. Body parts and objects/
+Neural networks/VGG19/Original images/
+Neural networks/VGG19/Experimental images/
+
 Brain/Brain representations/
-Neural networks/InceptionResNetV2/Conv small/
-Neural networks/InceptionResNetV2/Conv big/
-Neural networks/ResNet50/Conv small/
-Neural networks/ResNet50/Conv big/
-Neural networks/ResNet101/Conv small/
-Neural networks/ResNet101/Conv big/
-Neural networks/Densenet201/Conv small/
-Neural networks/Densenet201/Conv small, different averaging/
-Neural networks/Densenet201/Conv big/
+
+Neural networks/InceptionResNetV2/Original images/
+Neural networks/InceptionResNetV2/Experimental images/
+
+Neural networks/ResNet50/Experiment images/
+Neural networks/ResNet50/Original images/
+
+Neural networks/ResNet101/Experimental images/
+Neural networks/ResNet101/Original images/
+
+Neural networks/Densenet201/Experiment images/
+Neural networks/Densenet201/Original images/
+
 *.asv
 Brain/Images/
 
