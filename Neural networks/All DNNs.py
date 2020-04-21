@@ -75,10 +75,10 @@ plt.show()
 
 os.chdir(r"D:\thesis-scripts\Neural networks")
 cos = {"cos" : cos}
-cos_small = {"cos_small" : cos_small}
+cos_small = {"cos_small_original" : cos_small}
 
 scipy.io.savemat("cos.mat", cos)
-scipy.io.savemat("cos_small.mat", cos_small)
+scipy.io.savemat("cos_small_original.mat", cos_small)
 
 #%% Visualize all + the brain
 
