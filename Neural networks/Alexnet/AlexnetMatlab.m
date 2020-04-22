@@ -6,15 +6,15 @@
 
 clc, clear
 cd('D:\THESIS\DATA\DATA. CAT12');
-load('images_forDNN.mat');
-images = images_forDNN;
-clear images_forDNN
+load('img1.mat');
+images = img;
+clear img
 images = permute(images, [2, 3, 4, 1]);
 disp(size(images)); % for Alexnet (227, 227, 3, 336) or (width, height, rgb_channels, n_samples)
 
 %% Imresize if necessary
 
-images = uint8(imresize(images, [299 299]));
+images = uint8(imresize(images, [227 227]));
 
 %% Net
 

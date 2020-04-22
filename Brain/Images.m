@@ -1,11 +1,11 @@
 %% Loading images
 
 clc,clear
-cd("C:\Users\victo\Desktop\thesis-scripts\images")
-load("images_mirrored.mat")
+cd("D:\thesis-scripts\images")
+load("images_original.mat")
 images = images_original;
 size(images)
-clear images_mirrorred
+clear images_original
 
 %% Making silhoettes
 

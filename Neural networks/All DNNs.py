@@ -50,7 +50,7 @@ nets = ["AlexNet", "VGG19", "ResNet50", "ResNet101", "InceptionV3", "InceptionRe
 #%% Visualize all
 
 fig = plt.figure()
-fig.suptitle("All DNNs: last layer")
+fig.suptitle("All DNNs | ORIGINAL IMAGES: last layer")
 for _ in range(0, len(nets)):
     plt.subplot(2,4,_+1)
 #    plt.imshow(corr_matrices[_],cmap="cividis")
@@ -61,7 +61,7 @@ for _ in range(0, len(nets)):
 plt.show() 
 
 fig = plt.figure()
-fig.suptitle("All DNNs (every condition is averaged): last layer")
+fig.suptitle("All DNNs (every condition is averaged) | ORIGINAL IMAGES: last layer")
 for _ in range(0, len(nets)):
     plt.subplot(2,4,_+1)
 #    plt.imshow(corr_matrices[_],cmap="cividis")
@@ -126,3 +126,45 @@ for _ in range(0, len(nets)):
     plt.title(nets[_], fontsize=9)
     
 plt.show()
+
+#%% ORIGINAL IMAGES
+
+cos = []
+# AlexNet
+os.chdir(r"D:\thesis-scripts\Neural networks\Alexnet\Original images")
+cos.append(scipy.io.loadmat("cos_ALEX")["cos"][0][7])
+# VGG19
+os.chdir(r"D:\thesis-scripts\Neural networks\VGG19\Original images")
+cos.append(scipy.io.loadmat("cos_VGG")["cos"][0][18])
+# ResNet50
+os.chdir(r"D:\thesis-scripts\Neural networks\ResNet50\Original images\Conv big, original images")
+cos.append(scipy.io.loadmat("co_orig_50_fc1000.mat")["co"])
+# ResNet101
+os.chdir(r"D:\thesis-scripts\Neural networks\ResNet101\Original images\Conv big, original")
+cos.append(scipy.io.loadmat("co_orig_101_fc1000.mat")["co"])
+# InceptionV3
+os.chdir(r"D:\thesis-scripts\Neural networks\InceptionV3\Original images")
+cos.append(scipy.io.loadmat("cos_INC")["cos"][0][47])
+# InceptionResNetV2
+os.chdir(r"D:\thesis-scripts\Neural networks\InceptionResNetV2\Original images\Conv big, original images")
+cos.append(scipy.io.loadmat("co_orig_176_PRED.mat")["co"])
+# DenseNet-201
+os.chdir(r"D:\thesis-scripts\Neural networks\Densenet201\Original images\Conv big, original images")
+cos.append(scipy.io.loadmat("co_orig_201_fc1000.mat")["co"])
+
+import numpy as np
+cos_small = []
+for co in cos:
+    x_ind = -48
+    y_ind = -48
+    small = np.zeros((7, 7))
+    for x in range(0, 7):
+        x_ind += 48
+        y_ind = - 48
+        for y in range(0, 7):
+            y_ind += 48
+            small[x, y] = np.mean(co[0+x_ind:48+x_ind, 0+y_ind:48+y_ind])
+    cos_small.append(small)    
+del co, small, x, x_ind, y, y_ind
+
+nets = ["AlexNet", "VGG19", "ResNet50", "ResNet101", "InceptionV3", "InceptionResNetV2", "DenseNet-201"]

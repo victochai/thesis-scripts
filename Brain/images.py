@@ -5,13 +5,12 @@ import scipy.io
 import glob
 import numpy as np
 import matplotlib.pyplot as plt
+import re
 
-from tensorflow.keras.preprocessing.image import load_img
-from tensorflow.keras.preprocessing.image import img_to_array
+#%% 1.) Images used in the experiment
 
-#%% Images
-
-img_dir = r"D:\THESIS\input_new"
+# Just load all the filenames
+img_dir = r"D:\THESIS\IMAGES EXPERIMENT, 336"
 os.chdir(img_dir)
 body = [name for name in glob.glob('*body*')]
 hand = [name for name in glob.glob('*hand*')]
@@ -20,155 +19,203 @@ tool = [name for name in glob.glob('*tool*')]
 man = [name for name in glob.glob('*Mani*')]
 nman = [name for name in glob.glob('*NMan*')]
 chair = [name for name in glob.glob('*Chair*')]
-m = len(os.listdir(img_dir))
 filenames = body + hand + face + tool + man + nman + chair
 del body, hand, face, tool, man, nman, chair
 
+# Rearrange them all
+# 1. body
+ro = re.compile("SHINEd_body_\d.bmp|SHINEd_body_\d_flipped.bmp")
+body1 = ro.findall(str(filenames))
+ro = re.compile("SHINEd_body_\d\d.bmp|SHINEd_body_\d\d_flipped.bmp")
+body2 = ro.findall(str(filenames))
+body = body1+body2
+del body1, body2
+
+# 2. hand
+ro = re.compile("SHINEd_hand_\d.bmp|SHINEd_hand_\d_flipped.bmp")
+hand1 = ro.findall(str(filenames))
+ro = re.compile("SHINEd_hand_\d\d.bmp|SHINEd_hand_\d\d_flipped.bmp")
+hand2 = ro.findall(str(filenames))
+hand = hand1+hand2
+del hand1, hand2
+
+# 3. face
+ro = re.compile("SHINEd_face_\d.bmp|SHINEd_face_\d_flipped.bmp")
+face1 = ro.findall(str(filenames))
+ro = re.compile("SHINEd_face_\d\d.bmp|SHINEd_face_\d\d_flipped.bmp")
+face2 = ro.findall(str(filenames))
+face = face1+face2
+del face1, face2
+
+# 4. tool
+ro = re.compile("SHINEd_tool_\d.bmp|SHINEd_tool_\d_flipped.bmp")
+tool1 = ro.findall(str(filenames))
+ro = re.compile("SHINEd_tool_\d\d.bmp|SHINEd_tool_\d\d_flipped.bmp")
+tool2 = ro.findall(str(filenames))
+tool = tool1+tool2
+del tool1, tool2
+
+# 5. mani
+ro = re.compile("SHINEd_Mani_\d.bmp|SHINEd_Mani_\d_flipped.bmp")
+mani1 = ro.findall(str(filenames))
+ro = re.compile("SHINEd_Mani_\d\d.bmp|SHINEd_Mani_\d\d_flipped.bmp")
+mani2 = ro.findall(str(filenames))
+mani = mani1+mani2
+del mani1, mani2
+
+# 6. nman
+ro = re.compile("SHINEd_NMan_\d.bmp|SHINEd_NMan_\d_flipped.bmp")
+nman1 = ro.findall(str(filenames))
+ro = re.compile("SHINEd_NMan_\d\d.bmp|SHINEd_NMan_\d\d_flipped.bmp")
+nman2 = ro.findall(str(filenames))
+nman = nman1+nman2
+del nman1, nman2
+
+# 7. chair
+ro = re.compile("SHINEd_Chair_\d.bmp|SHINEd_Chair_\d_flipped.bmp")
+chair1 = ro.findall(str(filenames))
+ro = re.compile("SHINEd_Chair_\d\d.bmp|SHINEd_Chair_\d\d_flipped.bmp")
+chair2 = ro.findall(str(filenames))
+chair = chair1+chair2
+del chair1, chair2, ro
+
+filenames = body+hand+face+tool+mani+nman+chair
+del body, hand, face, tool, mani, nman, chair, img_dir
+
+images_experiment = [plt.imread(image) for image in filenames]
+images_experiment = np.array(images_experiment)
+
+del filenames
+
+#%% 2.) Images original (making them flipped)
+
+img_dir = r"D:\THESIS\IMAGES ORIGINAL, 168"
+os.chdir(img_dir)
+body = [name for name in glob.glob('*body*')]
+hand = [name for name in glob.glob('*hand*')]
+face = [name for name in glob.glob('*face*')]
+tool = [name for name in glob.glob('*tool*')]
+man = [name for name in glob.glob('*Mani*')]
+nman = [name for name in glob.glob('*NMan*')]
+chair = [name for name in glob.glob('*Chair*')]
+filenames = body + hand + face + tool + man + nman + chair
+del body, hand, face, tool, man, nman, chair, img_dir
+
 images = [plt.imread(image) for image in filenames]
-images_bw = []
-for image in images:
-    if image.shape == (400, 400, 3):
-        images_bw.append(image[:,:,0])
-    elif image.shape == (400, 400):
-        images_bw.append(image)
+images_original = []
+for _ in images:
+    if _.shape == (400, 400, 3):
+        images_original.append(_[:,:,0])
+        images_original.append(np.fliplr(_[:,:,0]))
+    elif _.shape == (400, 400):
+        images_original.append(_)
+        images_original.append(np.fliplr(_))
     else:
         print("Unexpected shape.")
+
+del filenames, images
+images_original = np.array(images_original)
+
+#plt.imshow(images_original[0])
+#plt.imshow(images_original[1])
+
+#%% 3.) Making silhouettes
+
+silhouettes = images_original
+for _ in silhouettes:
+    for x in range(0,400):
+        for y in range(0,400):
+            if _[x,y] != 255:
+                _[x,y] = 0
+
+del x, y
+
+#%% 4.) Making co-s 
+ 
+co_exp = np.corrcoef(images_experiment.reshape(images_experiment.shape[0], -1))
+co_orig = np.corrcoef(images_original.reshape(images_original.shape[0], -1))
+co_silh = np.corrcoef(silhouettes.reshape(silhouettes.shape[0], -1))
+
+# Exp
+co_small_exp = np.zeros((7, 7))
+x_ind = -48
+y_ind = -48
+for x in range(0, 7):
+    x_ind += 48
+    y_ind = - 48
+    for y in range(0, 7):
+        y_ind += 48
+        co_small_exp[x, y] = np.mean(co_exp[0+x_ind:48+x_ind, 0+y_ind:48+y_ind])
+del x, x_ind, y, y_ind
     
-os.chdir(r"C:\Users\victo\Desktop\thesis-scripts\images")
-images_original = {'images_original' : images_bw}
-scipy.io.savemat('images_original.mat', images_original)
+# Orig
+co_small_orig = np.zeros((7, 7))
+x_ind = -48
+y_ind = -48
+for x in range(0, 7):
+    x_ind += 48
+    y_ind = - 48
+    for y in range(0, 7):
+        y_ind += 48
+        co_small_orig[x, y] = np.mean(co_orig[0+x_ind:48+x_ind, 0+y_ind:48+y_ind])
+del x, x_ind, y, y_ind
 
-#%% Images + Mirror
+# Silh
+co_small_silh = np.zeros((7, 7))
+x_ind = -48
+y_ind = -48
+for x in range(0, 7):
+    x_ind += 48
+    y_ind = - 48
+    for y in range(0, 7):
+        y_ind += 48
+        co_small_silh[x, y] = np.mean(co_silh[0+x_ind:48+x_ind, 0+y_ind:48+y_ind])
+del x, x_ind, y, y_ind
 
-img_dir = r"D:\THESIS\input_new"
-os.chdir(img_dir)
-body = [name for name in glob.glob('*body*')]
-hand = [name for name in glob.glob('*hand*')]
-face = [name for name in glob.glob('*face*')]
-tool = [name for name in glob.glob('*tool*')]
-man = [name for name in glob.glob('*Mani*')]
-nman = [name for name in glob.glob('*NMan*')]
-chair = [name for name in glob.glob('*Chair*')]
-m = len(os.listdir(img_dir))
-filenames = body + hand + face + tool + man + nman + chair
-del body, hand, face, tool, man, nman, chair
+#%% 5.) Plot all
 
-images = [plt.imread(image) for image in filenames]
-images_bw = []
-for image in images:
-    if image.shape == (400, 400, 3):
-        images_bw.append(image[:,:,0])
-        images_bw.append(np.fliplr(image[:,:,0]))
-    elif image.shape == (400, 400):
-        images_bw.append(image)
-        images_bw.append(np.fliplr(image))
-    else:
-        print("Unexpected shape.")
-
-plt.imshow(images_bw[0])
-plt.imshow(images_bw[1])
-
-os.chdir(r"C:\Users\victo\Desktop\thesis-scripts\images")
-images_forDNN = {'images_forDNN' : images}
-scipy.io.savemat('images_forDNN.mat', images_forDNN)
-
-#%% Save for DNNs
-
-n_samples = 336
-(height, width, nchannels) = (400, 400, 3)
-images = np.zeros((n_samples, height, width, nchannels))
-
-for idx, image in enumerate(images_bw):
-   images[idx,:,:,:] = np.concatenate((image.reshape((400,400,1)), image.reshape((400,400,1)), image.reshape(400,400,1)), 2)
-
-#%% Visualization stuff
-
-os.chdir(r"C:\Users\victo\Desktop\thesis-scripts\Brain\Brain representations")
-mat = scipy.io.loadmat("images_correlations_for_experiment.mat")["correlations"]
-body = mat[0][0]
-hand = mat[1][0]
-face = mat[2][0]
-co = mat[3][0]
-co_small = mat[4][0]
-
-#%% Plot all
-
-n_samples = co.shape[0]
+fig = plt.figure()
 
 plt.subplot(2,3,1)
-plt.bar([0, 1, 2], [body[1][0], hand[1][0], face[1][0]], color=('royalblue', 'orange', 'green'))
-plt.title("Correlation between different body parts\n and tools in " + str(n_samples) + " images used in the experiment")
-plt.ylabel("Correlation")
-plt.xlabel("Body part")
-plt.ylim((0,1))
-plt.xticks([0,1,2], [
-        "body | tool", "hand | tool", "face | tool"
-        ], fontsize=6, rotation=0)
-
-plt.subplot(2,3,2)
-plt.bar([0, 1, 2], [body[2][0], hand[2][0], face[2][0]], color=('royalblue', 'orange', 'green'))
-plt.title("Correlation between different body parts\n and manipulable objects in " + str(n_samples) + " images used\nin the experiment")
-plt.ylabel("Correlation")
-plt.xlabel("Body part")
-plt.ylim((0,1))
-plt.xticks([0,1,2], [
-        "body | man", "hand | man", "face | man"
-        ], fontsize=6, rotation=0)
-
-plt.subplot(2,3,3)
-plt.bar([0, 1, 2], [body[3][0], hand[3][0], face[3][0]], color=('royalblue', 'orange', 'green'))
-plt.title("Correlation between different body parts\n and nonmanipulable objects in " + str(n_samples) + " images used\nin the experiment")
-plt.ylabel("Correlation")
-plt.xlabel("Body part")
-plt.ylim((0,1))
-plt.xticks([0,1,2], [
-        "body | nman", "hand | nman", "face | nnman"
-        ], fontsize=6, rotation=0)
+plt.imshow(co_silh)
+plt.colorbar()
+plt.clim(-1, 1)
+plt.title("Silhouettes")
+plt.axis("off")
 
 plt.subplot(2,3,4)
-plt.imshow(co)
+plt.imshow(co_small_silh)
 plt.colorbar()
-plt.title("Images used in the experiment correlations")
+plt.clim(0, 1)
+plt.title("Silhouettes \n(averaged)")
+plt.axis("off")
+
+plt.subplot(2,3,2)
+plt.imshow(co_exp)
+plt.colorbar()
+plt.clim(-1, 1)
+plt.title("Images used in the experiment")
 plt.axis("off")
 
 plt.subplot(2,3,5)
-plt.imshow(co_small)
+plt.imshow(co_small_exp)
 plt.colorbar()
-plt.title("Images used in the experiment  correlations (averaged)")
+plt.clim(0, 1)
+plt.title("Images used in the experiment \n(averaged)")
+plt.axis("off")
+
+plt.subplot(2,3,3)
+plt.imshow(co_silh)
+plt.colorbar()
+plt.clim(-1, 1)
+plt.title("Original images")
+plt.axis("off")
+
+plt.subplot(2,3,6)
+plt.imshow(co_small_silh)
+plt.colorbar()
+plt.clim(0, 1)
+plt.title("Original images \n(averaged)")
 plt.axis("off")
 
 plt.show()
-
-#%% Visualize new images ALEXNET | SMALL
-
-os.chdir(r"C:\Users\victo\Desktop\thesis-scripts\Brain\Images")
-mat = scipy.io.loadmat("coS_small_INC.mat")["coS_small"]
-conv_matrices = [mat[0][idx] for idx in range(48)]
-
-fig = plt.figure()
-fig.suptitle("INCEPTIONV3 WITH ORIGINAL IMAGES\nEvery condition is averaged\nBodies, faces, hands, tools, manipulable objects, nonmanipulable objects, chairs")
-for _ in range(0, len(conv_matrices)):
-    plt.subplot(6,8,_+1)
-    plt.imshow(conv_matrices[_])
-#    plt.imshow(conv_matrices[_],cmap="cividis")
-    plt.colorbar()
-    plt.axis("off")
-    plt.title(str(_+1), fontsize=9)
-plt.show()  
-
-#%% Visualize new images ALEXNET | BIG
-
-os.chdir(r"C:\Users\victo\Desktop\thesis-scripts\Brain\Images")
-mat = scipy.io.loadmat("cos_small_VGG.mat")["cos_small"]
-conv_matrices = [mat[0][idx] for idx in range(len(mat[0]))]
-
-fig = plt.figure()
-fig.suptitle("VGG19 WITH ORIGINAL IMAGES\nEvery condition is averaged\nBodies, faces, hands, tools, manipulable objects, nonmanipulable objects, chairs")
-for _ in range(0, len(conv_matrices)):
-    plt.subplot(3,7,_+1)
-    plt.imshow(conv_matrices[_])
-#    plt.imshow(conv_matrices[_],cmap="cividis")
-    plt.colorbar()
-    plt.axis("off")
-    plt.title(str(_+1), fontsize=9)
-plt.show()  
