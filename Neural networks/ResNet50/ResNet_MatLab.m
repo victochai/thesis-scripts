@@ -1,22 +1,25 @@
-%% Prepare | RESNET50 
+%% 1.) RESNET-50 
 
 clc, clear
 net = resnet50;
 % deepNetworkDesigner % So, yes, it is 50 layers
 
-%% RESNET 101
+%% 2.) RESNET 101
 
 clc, clear
 net = resnet101;
-% deepNetworkDesigner % So, yes, it is 50 layers
+% deepNetworkDesigner % So, yes, it is 101 layers
 
-%% Layers | Images
+%% 3.) Layers | Images
 
-cd("D:\THESIS\DATA\DATA. CAT12")
-load("images_vgg19.mat")
-images = permute(images_vgg, [2, 3, 4, 1]);
-disp(size(images));
-clear images_vgg
+cd('D:\THESIS\IMAGES EXPERIMENT, 336');
+load('img1.mat');
+images = img;
+clear img
+images = permute(images, [2, 3, 4, 1]);
+disp(size(images)); % (400, 400, 3, 336) 
+images = uint8(imresize(images, [224 224]));
+disp(size(images)); % (224, 224, 3, 336) 
 
 layers = net.Layers;
 l = {}
@@ -29,9 +32,9 @@ layers = {}
 for i = 1:numel(l)
     a = l{i, 1}
     % For ResNet101
-    ans = regexp(a, "conv1$|fc1000$|res\d\w_branch\d\w$|fc1000$|res\d\w\d_branch\d\w$|res\d\w\d\d_branch\d\w$")
+    % ans = regexp(a, "conv1$|fc1000$|res\d\w_branch\d\w$|fc1000$|res\d\w\d_branch\d\w$|res\d\w\d\d_branch\d\w$")
     % For ResNet50
-    % ans = regexp(a, "conv1$|fc1000$|res\d\w_branch\d\w$|fc1000$|")
+    ans = regexp(a, "conv1$|fc1000$|res\d\w_branch\d\w$|fc1000$|")
     if ans == 1
         layers{i, 1} = l{i, 1}
     end       
@@ -42,9 +45,9 @@ clear a ans i % Should be 50 layers
 
 %% Feature maps
 
-cd("D:\thesis-scripts\Neural networks\ResNet101")
+cd("D:\thesis-scripts\Neural networks\ResNet50")
 
-for i = 100:101
+for i = 1:50
     
     disp(layers{i});
     feature_map = activations(net, images, layers{i});
@@ -72,9 +75,11 @@ for i = 100:101
     
     co = corr(feature_map);
     % cos{i} = co;
-        
+    
+    cd("D:\thesis-scripts\Neural networks\ResNet50\Experiment images\Conv big")
     text = ["co_" + "orig_" + i + "_" + layers{i}] % CHANGE
     save(text, "co");
+    cd("D:\thesis-scripts\Neural networks\ResNet50\Experiment images\Conv small")
     text = ["co_small_" + "orig_" + i + "_"+ layers{i}] % CHANGE
     save(text, "co_small");
     

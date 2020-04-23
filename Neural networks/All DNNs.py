@@ -10,7 +10,7 @@ import scipy.io
 cos = []
 # AlexNet
 os.chdir(r"D:\thesis-scripts\Neural networks\Alexnet\Conv Big")
-cos.append(scipy.io.loadmat("fc8_co.mat")["fc8_co"])
+cos.append(a = scipy.io.loadmat("cos_alex.mat")["cos"])
 # VGG19
 os.chdir(r"D:\thesis-scripts\Neural networks\VGG19\Conv big")
 cos.append(scipy.io.loadmat("fc8.mat")["fc8"])
