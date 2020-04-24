@@ -168,3 +168,73 @@ for co in cos:
 del co, small, x, x_ind, y, y_ind
 
 nets = ["AlexNet", "VGG19", "ResNet50", "ResNet101", "InceptionV3", "InceptionResNetV2", "DenseNet-201"]
+
+#%% CREATE RDMs
+
+import os
+import scipy.io
+import numpy as np
+
+# Big RDM / RESNET-50
+os.chdir(r"D:\thesis-scripts\Neural networks\ResNet50\Experiment images\Conv big\l1")
+l1 = os.listdir()
+os.chdir(r"D:\thesis-scripts\Neural networks\ResNet50\Experiment images\Conv big\l2")
+l2 = os.listdir()
+l = l1 + l2
+del l1, l2
+os.chdir(r"D:\thesis-scripts\Neural networks\ResNet50\Experiment images\Conv big")
+mat = [scipy.io.loadmat(m)["co"] for m in l]
+rdms_resnet50 = np.zeros((50, 336, 336))
+for _ in range(0, 50):
+    rdms_resnet50[_, :, :] = 1 - mat[_]
+rdms_resnet50 = {"rdms_resnet50" : rdms_resnet50}
+scipy.io.savemat("rdms_resnet50.mat", rdms_resnet50)
+    
+# Small RDM / RESNET-50
+os.chdir(r"D:\thesis-scripts\Neural networks\ResNet50\Experiment images\Conv small\l1")
+l1 = os.listdir()
+os.chdir(r"D:\thesis-scripts\Neural networks\ResNet50\Experiment images\Conv small\l2")
+l2 = os.listdir()
+l = l1 + l2
+del l1, l2
+os.chdir(r"D:\thesis-scripts\Neural networks\ResNet50\Experiment images\Conv small")
+mat = [scipy.io.loadmat(m)["co_small"] for m in l]
+rdms_resnet50_small = np.zeros((50, 7, 7))
+for _ in range(0, 50):
+    rdms_resnet50_small[_, :, :] = 1 - mat[_]   
+rdms_resnet50_small = {"rdms_resnet50_small" : rdms_resnet50_small}
+scipy.io.savemat("rdms_resnet50_small.mat", rdms_resnet50_small)
+    
+# Big RDM / RESNET-101
+os.chdir(r"D:\thesis-scripts\Neural networks\ResNet101\Experimental images\Conv big\l1")
+l1 = os.listdir()
+os.chdir(r"D:\thesis-scripts\Neural networks\ResNet101\Experimental images\Conv big\l2")
+l2 = os.listdir()
+os.chdir(r"D:\thesis-scripts\Neural networks\ResNet101\Experimental images\Conv big\l3")
+l3 = os.listdir()
+l = l1 + l2 + l3
+del l1, l2, l3
+os.chdir(r"D:\thesis-scripts\Neural networks\ResNet101\Experimental images\Conv big")
+mat = [scipy.io.loadmat(m)["co"] for m in l]
+rdms_resnet101 = np.zeros((101, 336, 336))
+for _ in range(0, 101):
+    rdms_resnet101[_, :, :] = 1 - mat[_]
+rdms_resnet101 = {"rdms_resnet101" : rdms_resnet101}
+scipy.io.savemat("rdms_resnet101.mat", rdms_resnet101)
+
+# Big RDM / RESNET-101
+os.chdir(r"D:\thesis-scripts\Neural networks\ResNet101\Experimental images\Conv small\l1")
+l1 = os.listdir()
+os.chdir(r"D:\thesis-scripts\Neural networks\ResNet101\Experimental images\Conv small\l2")
+l2 = os.listdir()
+os.chdir(r"D:\thesis-scripts\Neural networks\ResNet101\Experimental images\Conv small\l3")
+l3 = os.listdir()
+l = l1 + l2 + l3
+del l1, l2, l3
+os.chdir(r"D:\thesis-scripts\Neural networks\ResNet101\Experimental images\Conv small")
+mat = [scipy.io.loadmat(m)["co_small"] for m in l]
+rdms_resnet101_small = np.zeros((101, 7, 7))
+for _ in range(0, 101):
+    rdms_resnet101_small[_, :, :] = 1 - mat[_]
+rdms_resnet101_small = {"rdms_resnet101_small" : rdms_resnet101_small}
+scipy.io.savemat("rdms_resnet101_small.mat", rdms_resnet101_small)    

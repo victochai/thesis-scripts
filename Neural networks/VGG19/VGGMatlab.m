@@ -77,3 +77,41 @@ for i = 1:numel(layers)
     % imagesc(co);
 
 end
+
+%% 6.) Creating RDMs
+
+cd("D:\thesis-scripts\Neural networks\VGG19\Experimental images\Conv small")
+list = {"co_small_conv1_1.mat", "co_small_conv1_2.mat", "co_small_conv2_1.mat", ...
+    "co_small_conv2_2.mat", "co_small_conv3_1.mat", "co_small_conv3_2.mat", ...
+    "co_small_conv3_3.mat", "co_small_conv3_4.mat", "co_small_conv4_1.mat", ...
+    "co_small_conv4_2.mat", "co_small_conv4_3.mat", "co_small_conv4_4.mat", ...
+    "co_small_conv5_1.mat", "co_small_conv5_2.mat", "co_small_conv5_3.mat", ...
+    "co_small_conv5_4.mat", "co_small_fc6.mat", "co_small_fc7.mat", "co_small_fc8.mat"}'
+
+rdms_vgg19_small = {}
+for i = 1:19    
+    load(list{i});
+    rdms_vgg19_small{i} = 1 - co_small;
+    clear co_small     
+end
+rdms_vgg19_small = rdms_vgg19_small';
+clear list
+save("rdms_vgg19_small", "rdms_vgg19_small")
+
+cd("D:\thesis-scripts\Neural networks\VGG19\Experimental images\Conv big")
+list = {"co_conv1_1.mat", "co_conv1_2.mat", "co_conv2_1.mat", ...
+    "co_conv2_2.mat", "co_conv3_1.mat", "co_conv3_2.mat", ...
+    "co_conv3_3.mat", "co_conv3_4.mat", "co_conv4_1.mat", ...
+    "co_conv4_2.mat", "co_conv4_3.mat", "co_conv4_4.mat", ...
+    "co_conv5_1.mat", "co_conv5_2.mat", "co_conv5_3.mat", ...
+    "co_conv5_4.mat", "co_fc6.mat", "co_fc7.mat", "co_fc8.mat"}'
+
+rdms_vgg19 = {}
+for i = 1:19    
+    load(list{i});
+    rdms_vgg19{i} = 1 - co;
+    clear co    
+end
+clear list
+rdms_vgg19 = rdms_vgg19';
+save("rdms_vgg19", "rdms_vgg19")

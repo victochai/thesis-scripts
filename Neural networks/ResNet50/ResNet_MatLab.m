@@ -43,7 +43,7 @@ end
 layers = layers(~cellfun('isempty', layers))
 clear a ans i % Should be 50 layers
 
-%% Feature maps
+%% 4.) Feature maps
 
 cd("D:\thesis-scripts\Neural networks\ResNet50")
 
@@ -86,3 +86,7 @@ for i = 1:50
     clear feature_map body hand face man nonman tool chair co co_small matrix
     
 end
+
+%% 5.) RDMs | 50 | 101
+
+% Python code
