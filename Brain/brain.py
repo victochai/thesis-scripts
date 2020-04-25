@@ -7,563 +7,881 @@ import scipy.io
 
 #%% Brain representations + Nets
 
-# Brain
-work_dir = r"D:\thesis-scripts\Brain\Brain representations"
-os.chdir(work_dir)
-
-ant = scipy.io.loadmat("anterior_big_MATRIX.mat")["anterior_big_MATRIX"]
-ant_left = scipy.io.loadmat("anterior_left.mat")["anterior_left"]
-ant_right = scipy.io.loadmat("anterior_right.mat")["anterior_right"]
-new = scipy.io.loadmat("new.mat")["new"]
-
-op = scipy.io.loadmat("OP_MATRIX.mat")["OP_MATRIX"]
-calc = scipy.io.loadmat("CALC_MATRIX.mat")["CALC_MATRIX"]
-op_calc = scipy.io.loadmat("OP_CALC_MATRIX.mat")["OP_CALC_MATRIX"]
-pos = scipy.io.loadmat("pos_res2_mvpa_MATRIX.mat")["pos_res2_mvpa"]
-
-#%% Correlation between body parts and objects in the brain
-
-brain_regions = [
-        "calc. cortex", 
-        "occip. pole",
-        "post. IOG",
-        "ITG + ant. IOG (left)"
-        ]
-
 os.chdir(r"D:\thesis-scripts\Brain\Brain representations")
 
-body = scipy.io.loadmat("body_left.mat")["body"]
-hand = scipy.io.loadmat("hand_left.mat")["hand"]
-face = scipy.io.loadmat("face_left.mat")["face"]
-
-body_right = scipy.io.loadmat("body_right.mat")["body"]
-hand_right = scipy.io.loadmat("hand_right.mat")["hand"]
-face_right = scipy.io.loadmat("face_right.mat")["face"]
-
-body_center = scipy.io.loadmat("body.mat")["body"]
-hand_center = scipy.io.loadmat("hand.mat")["hand"]
-face_center = scipy.io.loadmat("face.mat")["face"]
-
-# Horizontal:
-objects = 0
-tool = 1
-mani = 2
-nman = 3
-
-#%% OBJECTS
-
-fig = plt.figure()
-fig.suptitle("BRAIN REGIONS AND OBJECTS (tool, mani, nman) CORRELATION", color='red')
-
-plt.subplot(2, 3, 1)
-plt.bar(["body", "hand", "face"], 
-        [body[objects, 0], hand[objects, 0], face[objects, 0]], 
-        color=('royalblue', 'orange', 'green'))
-plt.ylabel("Correlation")
-plt.title("Calcarine cortex")
-
-plt.subplot(2, 3, 2)
-plt.bar(["body", "hand", "face"], 
-        [body[objects, 1], hand[objects, 1], face[objects, 1]], 
-        color=('royalblue', 'orange', 'green'))
-plt.ylabel("Correlation")
-plt.title("Occipital pole")
-
-plt.subplot(2, 3, 3)
-plt.bar(["body", "hand", "face"], 
-        [body[objects, 2], hand[objects, 2], face[objects, 2]], 
-        color=('royalblue', 'orange', 'green'))
-plt.ylabel("Correlation")
-plt.title("Posterior IOG")
-
-plt.subplot(2, 3, 4)
-plt.bar(["body", "hand", "face"], 
-        [body[objects, 3], hand[objects, 3], face[objects, 3]], 
-        color=('royalblue', 'orange', 'green'))
-plt.ylabel("Correlation")
-plt.title("ITG + ant. IOG (left)")
-
-plt.subplot(2, 3, 5)
-plt.bar(["body", "hand", "face"], 
-        [body_right[objects, 3], hand_right[objects, 3], face_right[objects, 3]], 
-        color=('royalblue', 'orange', 'green'))
-plt.ylabel("Correlation")
-plt.title("ITG + ant. IOG (right)")
-
-plt.subplot(2, 3, 6)
-plt.bar(["body", "hand", "face"], 
-        [body_center[objects, 3], hand_center[objects, 3], face_center[objects, 3]], 
-        color=('royalblue', 'orange', 'green'))
-plt.ylabel("Correlation")
-plt.title("ITG + ant. IOG (BOTH HEMISPHERES)")
-
-#%% TOOLS
-
-fig = plt.figure()
-fig.suptitle("BRAIN REGIONS AND TOOLS CORRELATION", color='red')
-
-plt.subplot(2, 3, 1)
-plt.bar(["body", "hand", "face"], 
-        [body[tool, 0], hand[tool, 0], face[tool, 0]], 
-        color=('royalblue', 'orange', 'green'))
-plt.ylabel("Correlation")
-plt.title("Calcarine cortex")
-
-plt.subplot(2, 3, 2)
-plt.bar(["body", "hand", "face"], 
-        [body[tool, 1], hand[tool, 1], face[tool, 1]], 
-        color=('royalblue', 'orange', 'green'))
-plt.ylabel("Correlation")
-plt.title("Occipital pole")
-
-plt.subplot(2, 3, 3)
-plt.bar(["body", "hand", "face"], 
-        [body[tool, 2], hand[tool, 2], face[tool, 2]], 
-        color=('royalblue', 'orange', 'green'))
-plt.ylabel("Correlation")
-plt.title("Posterior IOG")
-
-plt.subplot(2, 3, 4)
-plt.bar(["body", "hand", "face"], 
-        [body[tool, 3], hand[tool, 3], face[tool, 3]], 
-        color=('royalblue', 'orange', 'green'))
-plt.ylabel("Correlation")
-plt.title("ITG + ant. IOG (left)")
-
-plt.subplot(2, 3, 5)
-plt.bar(["body", "hand", "face"], 
-        [body_right[tool, 3], hand_right[tool, 3], face_right[tool, 3]], 
-        color=('royalblue', 'orange', 'green'))
-plt.ylabel("Correlation")
-plt.title("ITG + ant. IOG (right)")
-
-plt.subplot(2, 3, 6)
-plt.bar(["body", "hand", "face"], 
-        [body_center[tool, 3], hand_center[tool, 3], face_center[tool, 3]], 
-        color=('royalblue', 'orange', 'green'))
-plt.ylabel("Correlation")
-plt.title("ITG + ant. IOG (BOTH HEMISPHERES)")
-
-#%% MANI
-
-fig = plt.figure()
-fig.suptitle("BRAIN REGIONS AND MANI CORRELATION", color='red')
-
-plt.subplot(2, 3, 1)
-plt.bar(["body", "hand", "face"], 
-        [body[mani, 0], hand[mani, 0], face[mani, 0]], 
-        color=('royalblue', 'orange', 'green'))
-plt.ylabel("Correlation")
-plt.title("Calcarine cortex")
-
-plt.subplot(2, 3, 2)
-plt.bar(["body", "hand", "face"], 
-        [body[mani, 1], hand[mani, 1], face[mani, 1]], 
-        color=('royalblue', 'orange', 'green'))
-plt.ylabel("Correlation")
-plt.title("Occipital pole")
-
-plt.subplot(2, 3, 3)
-plt.bar(["body", "hand", "face"], 
-        [body[mani, 2], hand[mani, 2], face[mani, 2]], 
-        color=('royalblue', 'orange', 'green'))
-plt.ylabel("Correlation")
-plt.title("Posterior IOG")
-
-plt.subplot(2, 3, 4)
-plt.bar(["body", "hand", "face"], 
-        [body[mani, 3], hand[mani, 3], face[mani, 3]], 
-        color=('royalblue', 'orange', 'green'))
-plt.ylabel("Correlation")
-plt.title("ITG + ant. IOG (left)")
-
-plt.subplot(2, 3, 5)
-plt.bar(["body", "hand", "face"], 
-        [body_right[mani, 3], hand_right[mani, 3], face_right[mani, 3]], 
-        color=('royalblue', 'orange', 'green'))
-plt.ylabel("Correlation")
-plt.title("ITG + ant. IOG (right)")
-
-plt.subplot(2, 3, 6)
-plt.bar(["body", "hand", "face"], 
-        [body_center[mani, 3], hand_center[mani, 3], face_center[mani, 3]], 
-        color=('royalblue', 'orange', 'green'))
-plt.ylabel("Correlation")
-plt.title("ITG + ant. IOG (BOTH HEMISPHERES)")
-
-#%% NMAN
-
-fig = plt.figure()
-fig.suptitle("BRAIN REGIONS AND NMAN CORRELATION", color='red')
-
-plt.subplot(2, 3, 1)
-plt.bar(["body", "hand", "face"], 
-        [body[nman, 0], hand[nman, 0], face[nman, 0]], 
-        color=('royalblue', 'orange', 'green'))
-plt.ylabel("Correlation")
-plt.title("Calcarine cortex")
-
-plt.subplot(2, 3, 2)
-plt.bar(["body", "hand", "face"], 
-        [body[nman, 1], hand[nman, 1], face[nman, 1]], 
-        color=('royalblue', 'orange', 'green'))
-plt.ylabel("Correlation")
-plt.title("Occipital pole")
-
-plt.subplot(2, 3, 3)
-plt.bar(["body", "hand", "face"], 
-        [body[nman, 2], hand[nman, 2], face[nman, 2]], 
-        color=('royalblue', 'orange', 'green'))
-plt.ylabel("Correlation")
-plt.title("Posterior IOG")
-
-plt.subplot(2, 3, 4)
-plt.bar(["body", "hand", "face"], 
-        [body[nman, 3], hand[nman, 3], face[nman, 3]], 
-        color=('royalblue', 'orange', 'green'))
-plt.ylabel("Correlation")
-plt.title("ITG + ant. IOG (left)")
-
-plt.subplot(2, 3, 5)
-plt.bar(["body", "hand", "face"], 
-        [body_right[nman, 3], hand_right[nman, 3], face_right[nman, 3]], 
-        color=('royalblue', 'orange', 'green'))
-plt.ylabel("Correlation")
-plt.title("ITG + ant. IOG (right)")
-
-plt.subplot(2, 3, 6)
-plt.bar(["body", "hand", "face"], 
-        [body_center[nman, 3], hand_center[nman, 3], face_center[nman, 3]], 
-        color=('royalblue', 'orange', 'green'))
-plt.ylabel("Correlation")
-plt.title("ITG + ant. IOG (BOTH HEMISPHERES)")
-
-#%% OTHER visualizations
-
-# Objects
-plt.plot(body[0,:],'-o')
-plt.plot(hand[0,:],'-o')
-plt.plot(face[0,:],'-o')
-plt.grid()
-plt.ylim((-0.5,0.1))
-# plt.xticks(list(range(0,48)), list(range(1,49)))
-plt.xticks(list(range(0,4)), brain_regions, fontsize=8)
-plt.xlabel("Brain region")
-plt.ylabel("Correlation")
-plt.title("Correlation between different body parts and objects (tools + manipulable + nonmanipulable) in 4 brain regions")
-plt.legend(("bodies", "hands", "faces"), loc='lower left')
-plt.show()
-
-# Tools
-plt.plot(body[1,:],'-o')
-plt.plot(hand[1,:],'-o')
-plt.plot(face[1,:],'-o')
-plt.grid()
-plt.ylim((-0.5,0.1))
-# plt.xticks(list(range(0,48)), list(range(1,49)))
-plt.xticks(list(range(0,4)), brain_regions, fontsize=8)
-plt.xlabel("Brain region")
-plt.ylabel("Correlation")
-plt.title("Correlation between different body parts and tools in 4 brain regions")
-plt.legend(("bodies", "hands", "faces"), loc='lower left')
-plt.show()
-
-# Man
-plt.plot(body[2,:],'-o')
-plt.plot(hand[2,:],'-o')
-plt.plot(face[2,:],'-o')
-plt.grid()
-plt.ylim((-0.5,0.1))
-# plt.xticks(list(range(0,48)), list(range(1,49)))
-plt.xticks(list(range(0,4)), brain_regions, fontsize=8)
-plt.xlabel("Brain region")
-plt.ylabel("Correlation")
-plt.title("Correlation between different body parts and manipulable objects in 4 brain regions")
-plt.legend(("bodies", "hands", "faces"), loc='lower left')
-plt.show()
-
-# Nman
-plt.plot(body[3,:],'-o')
-plt.plot(hand[3,:],'-o')
-plt.plot(face[3,:],'-o')
-plt.grid()
-plt.ylim((-0.5,0.1))
-# plt.xticks(list(range(0,48)), list(range(1,49)))
-plt.xticks(list(range(0,4)), brain_regions, fontsize=8)
-plt.xlabel("Brain region")
-plt.ylabel("Correlation")
-plt.title("Correlation between different body parts and nonmanipulable objects in 4 brain regions")
-plt.legend(("bodies", "hands", "faces"), loc='lower left')
-plt.show()
-
-#%% Plot all
-
-fig = plt.figure()
-fig.suptitle("BRAIN")
-# Objects
-plt.subplot(2,2,1)
-plt.plot(body[0,:],'-o')
-plt.plot(hand[0,:],'-o')
-plt.plot(face[0,:],'-o')
-plt.grid()
-plt.ylim((-0.5,0.1))
-# plt.xticks(list(range(0,48)), list(range(1,49)))
-plt.xticks(list(range(0,4)), brain_regions, fontsize=8)
-plt.xlabel("Brain region")
-plt.ylabel("Correlation")
-plt.title("Correlation between different body parts and objects\n(tools + manipulable + nonmanipulable) in 4 brain regions")
-plt.legend(("bodies", "hands", "faces"), loc='lower left')
-# Tools
-plt.subplot(2,2,2)
-plt.plot(body[1,:],'-o')
-plt.plot(hand[1,:],'-o')
-plt.plot(face[1,:],'-o')
-plt.grid()
-plt.ylim((-0.5,0.1))
-# plt.xticks(list(range(0,48)), list(range(1,49)))
-plt.xticks(list(range(0,4)), brain_regions, fontsize=8)
-plt.xlabel("Brain region")
-plt.ylabel("Correlation")
-plt.title("Correlation between different body parts and tools in 4 brain regions")
-plt.legend(("bodies", "hands", "faces"), loc='lower left')
-# Man
-plt.subplot(2,2,3)
-plt.plot(body[2,:],'-o')
-plt.plot(hand[2,:],'-o')
-plt.plot(face[2,:],'-o')
-plt.grid()
-plt.ylim((-0.5,0.1))
-# plt.xticks(list(range(0,48)), list(range(1,49)))
-plt.xticks(list(range(0,4)), brain_regions, fontsize=8)
-plt.xlabel("Brain region")
-plt.ylabel("Correlation")
-plt.title("Correlation between different body parts and manipulable objects in 4 brain regions")
-plt.legend(("bodies", "hands", "faces"), loc='lower left')
-# Nman
-plt.subplot(2,2,4)
-plt.plot(body[3,:],'-o')
-plt.plot(hand[3,:],'-o')
-plt.plot(face[3,:],'-o')
-plt.grid()
-plt.ylim((-0.5,0.1))
-# plt.xticks(list(range(0,48)), list(range(1,49)))
-plt.xticks(list(range(0,4)), brain_regions, fontsize=8)
-plt.xlabel("Brain region")
-plt.ylabel("Correlation")
-plt.title("Correlation between different body parts and nonmanipulable objects in 4 brain regions")
-plt.legend(("bodies", "hands", "faces"), loc='lower left')
-plt.show()
-
-#%% other
-
-alexnet_layers = ['conv1', 'conv2', 'conv3', 'conv4', 'conv5', 'fc6', 'fc7', 'fc8']
-vgg_layers = ['conv1_1',
-        'conv1_2',
-        'conv2_1',
-        'conv2_2',
-        'conv3_1',
-        'conv3_2',
-        'conv3_3',
-        'conv3_4',
-        'conv4_1',
-        'conv4_2',
-        'conv4_3',
-        'conv4_4',
-        'conv5_1',
-        'conv5_2',
-        'conv5_3',
-        'conv5_4',
-        'fc6',
-        'fc7',
-        'fc8']
-
-# InceptioV3 Layers
-a = [(("mod_A" + str(_) + " ") * 3).split(" ") for _ in range(1,4)]
-a = [_[:-1] for _ in a]
-a = [val for sublist in a for val in sublist]
-norm1 = [("n1_" + str(_) + " ").split(" ") for _ in range(1,4)]
-norm1 = [_[:-1] for _ in norm1]
-norm1 = [val for sublist in norm1 for val in sublist]
-b = [(("mod_B" + str(_) + " ") * 5).split(" ") for _ in range(1,5)]
-b = [_[:-1] for _ in b]
-b = [val for sublist in b for val in sublist]
-norm2 = [("n2_" + str(_) + " ").split(" ") for _ in range(1,5)]
-norm2 = [_[:-1] for _ in norm2]
-norm2 = [val for sublist in norm2 for val in sublist]
-c = [(("mod_C" + str(_) + " ") * 3).split(" ") for _ in range(1,3)]
-c = [_[:-1] for _ in c]
-c = [val for sublist in c for val in sublist]
-layers = ["conv1", "conv2", "conv3", "conv4", "conv5"] + a + norm1 + b + norm2 + c
-layers.append("FC")
-del a, b, c, norm1, norm2
-
-#%% Brain representations
-
-work_dir = r"C:\Users\victo\Desktop\thesis-scripts\Brain\Brain representations"
-os.chdir(work_dir)
-
-# Anterior
 ant = scipy.io.loadmat("anterior_big_MATRIX.mat")["anterior_big_MATRIX"]
 ant_left = scipy.io.loadmat("anterior_left.mat")["anterior_left"]
 ant_right = scipy.io.loadmat("anterior_right.mat")["anterior_right"]
+# new = scipy.io.loadmat("new.mat")["new"]
 
-# Posterior
-pos = scipy.io.loadmat("pos_res2_mvpa_MATRIX.mat")["pos_res2_mvpa"]
 op = scipy.io.loadmat("OP_MATRIX.mat")["OP_MATRIX"]
 calc = scipy.io.loadmat("CALC_MATRIX.mat")["CALC_MATRIX"]
 op_calc = scipy.io.loadmat("OP_CALC_MATRIX.mat")["OP_CALC_MATRIX"]
+pos = scipy.io.loadmat("pos_res2_mvpa_MATRIX.mat")["pos_res2_mvpa"]
 
-# Plot
+#%% RDMs + Averaging
+
+# Averaging
+ant = np.mean(ant, 2)
+ant_left = np.mean(ant_left, 2)
+ant_right = np.mean(ant_right, 2)
+
+calc = np.mean(calc, 2)
+op = np.mean(op, 2)
+op_calc = np.mean(op_calc, 2)
+pos = np.mean(pos, 2)
+
+# [x, y] averaging
+ant_av = np.zeros((7, 7))
+ant_left_av = np.zeros((7, 7))
+ant_right_av = np.zeros((7, 7))
+
+calc_av = np.zeros((7, 7))
+op_av = np.zeros((7, 7))
+op_calc_av = np.zeros((7, 7))
+pos_av = np.zeros((7, 7))
+
+for x in range(0, 7):
+    for y in range(0, 7):
+        # [x, y]
+        ant_av[x, y] = (ant[x, y] + ant[y, x])/2
+        ant_left_av[x, y] = (ant_left[x, y] + ant_left[y, x])/2
+        ant_right_av[x, y] = (ant_right[x, y] + ant_right[y, x])/2
+        calc_av[x, y] = (calc[x, y] + calc[y, x])/2
+        op_av[x, y] = (op[x, y] + op[y, x])/2
+        op_calc_av[x, y] = (op_calc[x, y] + op_calc[y, x])/2
+        pos_av[x, y] = (pos[x, y] + pos[y, x])/2
+        # [y, x]
+        ant_av[y, x] = (ant[x, y] + ant[y, x])/2
+        ant_left_av[y, x] = (ant_left[x, y] + ant_left[y, x])/2
+        ant_right_av[y, x] = (ant_right[x, y] + ant_right[y, x])/2
+        calc_av[y, x] = (calc[x, y] + calc[y, x])/2
+        op_av[y, x] = (op[x, y] + op[y, x])/2
+        op_calc_av[y, x] = (op_calc[x, y] + op_calc[y, x])/2
+        pos_av[y, x] = (pos[x, y] + pos[y, x])/2 
+        
+# Make RDMs       
+rdm_ant = 1 - ant_av
+rdm_ant_left = 1 -  ant_left_av
+rdm_ant_right = 1 -  ant_right_av
+rdm_calc = 1 - calc_av
+rdm_op = 1 - op_av
+rdm_op_calc = 1 - op_calc_av
+rdm_pos = 1 - pos_av
+
+#%% Save the results
+
+# RDMs
+os.chdir(r"D:\thesis-scripts\Brain\Brain representations\RDMs and other")
+RDM_ant = {"rdm_ant" : rdm_ant}
+RDM_ant_left = {"rdm_ant_left" : rdm_ant_left}
+RDM_ant_right = {"rdm_ant_right" : rdm_ant_right}
+RDM_calc = {"rdm_calc" : rdm_calc}
+RDM_op = {"rdm_op" : rdm_op}
+RDM_op_calc = {"rdm_op_calc" : rdm_op_calc}
+RDM_pos = {"rdm_pos" : rdm_pos}
+
+scipy.io.savemat("RDM_ant.mat", RDM_ant)
+scipy.io.savemat("RDM_ant_left.mat", RDM_ant_left)
+scipy.io.savemat("RDM_ant_right.mat", RDM_ant_right)
+scipy.io.savemat("RDM_calc.mat", RDM_calc)
+scipy.io.savemat("RDM_op.mat", RDM_op)
+scipy.io.savemat("RDM_op_calc.mat", RDM_op_calc)
+scipy.io.savemat("RDM_pos.mat", RDM_pos)
+
+# Not RDMs
+os.chdir(r"D:\thesis-scripts\Brain\Brain representations\RDMs and other")
+ANT = {"ant_av" : ant_av}
+ANT_LEFT = {"ant_left_av" : ant_left_av}
+ANT_RIGHT = {"ant_right_av" : ant_right_av}
+CALC = {"calc_av" : calc_av}
+OP = {"op_av" : op_av}
+OP_CALC = {"op_calc_av" : op_calc_av}
+POS = {"pos_av" : pos_av}
+
+scipy.io.savemat("ANT.mat", ANT)
+scipy.io.savemat("ANT_LEFT.mat", ANT_LEFT)
+scipy.io.savemat("ANT_RIGHT.mat", ANT_RIGHT)
+scipy.io.savemat("CALC.mat", CALC)
+scipy.io.savemat("OP.mat", OP)
+scipy.io.savemat("OP_CALC.mat", OP_CALC)
+scipy.io.savemat("POS.mat", POS)
+
+#%% Visualize stuff (not RDMs)
 
 fig = plt.figure()
 fig.suptitle("Brain split-half correlations\nBody, hand, face, tool, man, nman, chair")
 
 plt.subplot(2,4,1)
-plt.imshow(np.mean(ant, 2))
+plt.imshow(ant_av)
 plt.colorbar()
+plt.clim(-1, 1)
 plt.axis("off")
 plt.title("ITG + Anterior IOG")
 
 plt.subplot(2,4,2)
-plt.imshow(np.mean(ant_left, 2))
+plt.imshow(ant_left_av)
 plt.colorbar()
+plt.clim(-1, 1)
 plt.axis("off")
 plt.title("ITG + Anterior IOG (left)")
 
 plt.subplot(2,4,3)
-plt.imshow(np.mean(ant_right, 2))
+plt.imshow(ant_right_av)
 plt.colorbar()
+plt.clim(-1, 1)
 plt.axis("off")
 plt.title("ITG + Anterior IOG (right)")
 
 plt.subplot(2,4,5)
-plt.imshow(np.mean(pos, 2))
+plt.imshow(pos_av)
 plt.colorbar()
+plt.clim(-1, 1)
 plt.axis("off")
 plt.title("Posterior IOG")
 
 plt.subplot(2,4,6)
-plt.imshow(np.mean(calc, 2))
+plt.imshow(calc_av)
 plt.colorbar()
+plt.clim(-1, 1)
 plt.axis("off")
 plt.title("Calcarine cortex")
 
 plt.subplot(2,4,7)
-plt.imshow(np.mean(op, 2))
+plt.imshow(op_av)
 plt.colorbar()
+plt.clim(-1, 1)
 plt.axis("off")
 plt.title("Occipital pole")
 
 plt.subplot(2,4,8)
-plt.imshow(np.mean(op_calc, 2))
+plt.imshow(op_calc_av)
 plt.colorbar()
+plt.clim(-1, 1)
 plt.axis("off")
 plt.title("Calc. cort. + Occip. pole")
 
 plt.show()
 
-#%% Visualizing decodings
-
-work_dir = r"C:\Users\victo\Desktop\thesis-scripts\Brain\Brain representations"
-os.chdir(work_dir)
-conf_matrices = scipy.io.loadmat(r"decodings_all_confusion_matrix.mat")["confusion_matrix_mean"]
+#%% Visualize RDMs
 
 fig = plt.figure()
-fig.suptitle("LDA decodings\nBody, hand, face, tool, man, nman, chair")
+fig.suptitle("Brain split-half dissimilarities\nBody, hand, face, tool, man, nman, chair")
 
 plt.subplot(2,4,1)
-plt.imshow(conf_matrices[:,:,0])
+plt.imshow(rdm_ant)
 plt.colorbar()
+#plt.clim(0, 1.5)
 plt.axis("off")
 plt.title("ITG + Anterior IOG")
 
 plt.subplot(2,4,2)
-plt.imshow(conf_matrices[:,:,1])
+plt.imshow(rdm_ant_left)
 plt.colorbar()
+#plt.clim(0, 1.5)
 plt.axis("off")
 plt.title("ITG + Anterior IOG (left)")
 
 plt.subplot(2,4,3)
-plt.imshow(conf_matrices[:,:,2])
+plt.imshow(rdm_ant_right)
 plt.colorbar()
+#plt.clim(0, 1.5)
 plt.axis("off")
 plt.title("ITG + Anterior IOG (right)")
 
 plt.subplot(2,4,5)
-plt.imshow(conf_matrices[:,:,3])
+plt.imshow(rdm_pos)
 plt.colorbar()
+#plt.clim(0, 1.5)
 plt.axis("off")
 plt.title("Posterior IOG")
 
 plt.subplot(2,4,6)
-plt.imshow(conf_matrices[:,:,4])
+plt.imshow(rdm_calc)
 plt.colorbar()
+#plt.clim(0, 1.5)
 plt.axis("off")
 plt.title("Calcarine cortex")
 
 plt.subplot(2,4,7)
-plt.imshow(conf_matrices[:,:,5])
+plt.imshow(rdm_op)
 plt.colorbar()
+#plt.clim(0, 1.5)
 plt.axis("off")
 plt.title("Occipital pole")
 
 plt.subplot(2,4,8)
-plt.imshow(conf_matrices[:,:,6])
+plt.imshow(rdm_op_calc)
 plt.colorbar()
+#plt.clim(0, 1.5)
 plt.axis("off")
 plt.title("Calc. cort. + Occip. pole")
 
 plt.show()
 
-#%% Visualizing decodings | OBJECTS
+#%% BODY PARTS VS. OBJECTS
 
-work_dir = r"C:\Users\victo\Desktop\thesis-scripts\Brain\Brain representations"
-os.chdir(work_dir)
-conf_matrices = scipy.io.loadmat(r"decodings_objects_confusion_matrix.mat")["confusion_matrix_mean"]
+body = 0
+hand = 1
+face = 2
+tool = 3
+mani = 4
+nman = 5
+chair = 6
 
 fig = plt.figure()
-fig.suptitle("LDA object decodings\nTool, man, nman\n")
+fig.suptitle("BRAIN REGIONS AND OBJECTS (tool, mani, nman) CORRELATION", color="red")
 
+# ANT LEFT
 plt.subplot(2,4,1)
-plt.imshow(conf_matrices[:,:,0])
-plt.colorbar()
-plt.axis("off")
-plt.title("ITG + Anterior IOG")
-
-plt.subplot(2,4,2)
-plt.imshow(conf_matrices[:,:,1])
-plt.colorbar()
-plt.axis("off")
 plt.title("ITG + Anterior IOG (left)")
+plt.bar(1, (ant_left_av[body, tool] + ant_left_av[body, mani] + ant_left_av[body, nman])/3)
+plt.bar(2, (ant_left_av[hand, tool] + ant_left_av[hand, mani] + ant_left_av[hand, nman])/3)
+plt.bar(3, (ant_left_av[face, tool] + ant_left_av[face, mani] + ant_left_av[face, nman])/3)
+plt.xticks([1,2,3], ["body", "hand", "face"])
+plt.ylim([-.5, 0])
 
-plt.subplot(2,4,3)
-plt.imshow(conf_matrices[:,:,2])
-plt.colorbar()
-plt.axis("off")
+# ANT RIGHT
+plt.subplot(2,4,2)
 plt.title("ITG + Anterior IOG (right)")
+plt.bar(1, (ant_right_av[body, tool] + ant_right_av[body, mani] + ant_right_av[body, nman])/3)
+plt.bar(2, (ant_right_av[hand, tool] + ant_right_av[hand, mani] + ant_right_av[hand, nman])/3)
+plt.bar(3, (ant_right_av[face, tool] + ant_right_av[face, mani] + ant_right_av[face, nman])/3)
+plt.xticks([1,2,3], ["body", "hand", "face"])
+plt.ylim([-.5, 0])
 
+# ANT 
+plt.subplot(2,4,3)
+plt.title("ITG + Anterior IOG (both)")
+plt.bar(1, (ant_av[body, tool] + ant_av[body, mani] + ant_av[body, nman])/3)
+plt.bar(2, (ant_av[hand, tool] + ant_av[hand, mani] + ant_av[hand, nman])/3)
+plt.bar(3, (ant_av[face, tool] + ant_av[face, mani] + ant_av[face, nman])/3)
+plt.xticks([1,2,3], ["body", "hand", "face"])
+plt.ylim([-.5, 0])
+
+# POS
 plt.subplot(2,4,5)
-plt.imshow(conf_matrices[:,:,3])
-plt.colorbar()
-plt.axis("off")
 plt.title("Posterior IOG")
+plt.bar(1, (pos_av[body, tool] + pos_av[body, mani] + pos_av[body, nman])/3)
+plt.bar(2, (pos_av[hand, tool] + pos_av[hand, mani] + pos_av[hand, nman])/3)
+plt.bar(3, (pos_av[face, tool] + pos_av[face, mani] + pos_av[face, nman])/3)
+plt.xticks([1,2,3], ["body", "hand", "face"])
+plt.ylim([-.5, 0])
 
+# CALC
 plt.subplot(2,4,6)
-plt.imshow(conf_matrices[:,:,4])
-plt.colorbar()
-plt.axis("off")
 plt.title("Calcarine cortex")
+plt.bar(1, (calc_av[body, tool] + calc_av[body, mani] + calc_av[body, nman])/3)
+plt.bar(2, (calc_av[hand, tool] + calc_av[hand, mani] + calc_av[hand, nman])/3)
+plt.bar(3, (calc_av[face, tool] + calc_av[face, mani] + calc_av[face, nman])/3)
+plt.xticks([1,2,3], ["body", "hand", "face"])
+plt.ylim([-.5, 0])
 
+# OP
 plt.subplot(2,4,7)
-plt.imshow(conf_matrices[:,:,5])
-plt.colorbar()
-plt.axis("off")
-plt.title("Occipital pole")
+plt.title("Occipitale pole")
+plt.bar(1, (op_av[body, tool] + op_av[body, mani] + op_av[body, nman])/3)
+plt.bar(2, (op_av[hand, tool] + op_av[hand, mani] + op_av[hand, nman])/3)
+plt.bar(3, (op_av[face, tool] + op_av[face, mani] + op_av[face, nman])/3)
+plt.xticks([1,2,3], ["body", "hand", "face"])
+plt.ylim([-.5, 0])
 
+# OP & CALC
 plt.subplot(2,4,8)
-plt.imshow(conf_matrices[:,:,6])
-plt.colorbar()
-plt.axis("off")
-plt.title("Calc. cort. + Occip. pole")
+plt.title("Calcarine cortex + Occipital pole")
+plt.bar(1, (op_calc_av[body, tool] + op_calc_av[body, mani] + op_calc_av[body, nman])/3)
+plt.bar(2, (op_calc_av[hand, tool] + op_calc_av[hand, mani] + op_calc_av[hand, nman])/3)
+plt.bar(3, (op_calc_av[face, tool] + op_calc_av[face, mani] + op_calc_av[face, nman])/3)
+plt.xticks([1,2,3], ["body", "hand", "face"])
+plt.ylim([-.5, 0])
 
-plt.show()
+#%% BODY PARTS VS. TOOLS
+
+body = 0
+hand = 1
+face = 2
+tool = 3
+mani = 4
+nman = 5
+chair = 6
+
+fig = plt.figure()
+fig.suptitle("BRAIN REGIONS AND TOOLS CORRELATION", color="red")
+
+# ANT LEFT
+plt.subplot(2,4,1)
+plt.title("ITG + Anterior IOG (left)")
+plt.bar(1, ant_left_av[body, tool])
+plt.bar(2, ant_left_av[hand, tool])
+plt.bar(3, ant_left_av[face, tool])
+plt.xticks([1,2,3], ["body", "hand", "face"])
+plt.ylim([-.5, 0])
+
+# ANT RIGHT
+plt.subplot(2,4,2)
+plt.title("ITG + Anterior IOG (right)")
+plt.bar(1, ant_right_av[body, tool])
+plt.bar(2, ant_right_av[hand, tool])
+plt.bar(3, ant_right_av[face, tool])
+plt.xticks([1,2,3], ["body", "hand", "face"])
+plt.ylim([-.5, 0])
+
+# ANT 
+plt.subplot(2,4,3)
+plt.title("ITG + Anterior IOG (both)")
+plt.bar(1, ant_av[body, tool])
+plt.bar(2, ant_av[hand, tool])
+plt.bar(3, ant_av[face, tool])
+plt.xticks([1,2,3], ["body", "hand", "face"])
+plt.ylim([-.5, 0])
+
+# POS
+plt.subplot(2,4,5)
+plt.title("Posterior IOG")
+plt.bar(1, pos_av[body, tool])
+plt.bar(2, pos_av[hand, tool])
+plt.bar(3, pos_av[face, tool])
+plt.xticks([1,2,3], ["body", "hand", "face"])
+plt.ylim([-.5, 0])
+
+# CALC
+plt.subplot(2,4,6)
+plt.title("Calcarine cortex")
+plt.bar(1, calc_av[body, tool])
+plt.bar(2, calc_av[hand, tool])
+plt.bar(3, calc_av[face, tool])
+plt.xticks([1,2,3], ["body", "hand", "face"])
+plt.ylim([-.5, 0])
+
+# OP
+plt.subplot(2,4,7)
+plt.title("Occipitale pole")
+plt.bar(1, op_av[body, tool])
+plt.bar(2, op_av[hand, tool])
+plt.bar(3, op_av[face, tool])
+plt.xticks([1,2,3], ["body", "hand", "face"])
+plt.ylim([-.5, 0])
+
+# OP & CALC
+plt.subplot(2,4,8)
+plt.title("Calcarine cortex + Occipital pole")
+plt.bar(1, op_calc_av[body, tool])
+plt.bar(2, op_calc_av[hand, tool])
+plt.bar(3, op_calc_av[face, tool])
+plt.xticks([1,2,3], ["body", "hand", "face"])
+plt.ylim([-.5, 0])
+
+#%% BODY PARTS VS. MANI
+
+body = 0
+hand = 1
+face = 2
+tool = 3
+mani = 4
+nman = 5
+chair = 6
+
+fig = plt.figure()
+fig.suptitle("BRAIN REGIONS AND MANI CORRELATION", color="red")
+
+# ANT LEFT
+plt.subplot(2,4,1)
+plt.title("ITG + Anterior IOG (left)")
+plt.bar(1, ant_left_av[body, mani])
+plt.bar(2, ant_left_av[hand, mani])
+plt.bar(3, ant_left_av[face, mani])
+plt.xticks([1,2,3], ["body", "hand", "face"])
+plt.ylim([-.5, 0])
+
+# ANT RIGHT
+plt.subplot(2,4,2)
+plt.title("ITG + Anterior IOG (right)")
+plt.bar(1, ant_right_av[body, mani])
+plt.bar(2, ant_right_av[hand, mani])
+plt.bar(3, ant_right_av[face, mani])
+plt.xticks([1,2,3], ["body", "hand", "face"])
+plt.ylim([-.5, 0])
+
+# ANT 
+plt.subplot(2,4,3)
+plt.title("ITG + Anterior IOG (both)")
+plt.bar(1, ant_av[body, mani])
+plt.bar(2, ant_av[hand, mani])
+plt.bar(3, ant_av[face, mani])
+plt.xticks([1,2,3], ["body", "hand", "face"])
+plt.ylim([-.5, 0])
+
+# POS
+plt.subplot(2,4,5)
+plt.title("Posterior IOG")
+plt.bar(1, pos_av[body, mani])
+plt.bar(2, pos_av[hand, mani])
+plt.bar(3, pos_av[face, mani])
+plt.xticks([1,2,3], ["body", "hand", "face"])
+plt.ylim([-.5, 0])
+
+# CALC
+plt.subplot(2,4,6)
+plt.title("Calcarine cortex")
+plt.bar(1, calc_av[body, mani])
+plt.bar(2, calc_av[hand, mani])
+plt.bar(3, calc_av[face, mani])
+plt.xticks([1,2,3], ["body", "hand", "face"])
+plt.ylim([-.5, 0])
+
+# OP
+plt.subplot(2,4,7)
+plt.title("Occipitale pole")
+plt.bar(1, op_av[body, mani])
+plt.bar(2, op_av[hand, mani])
+plt.bar(3, op_av[face, mani])
+plt.xticks([1,2,3], ["body", "hand", "face"])
+plt.ylim([-.5, 0])
+
+# OP & CALC
+plt.subplot(2,4,8)
+plt.title("Calcarine cortex + Occipital pole")
+plt.bar(1, op_calc_av[body, mani])
+plt.bar(2, op_calc_av[hand, mani])
+plt.bar(3, op_calc_av[face, mani])
+plt.xticks([1,2,3], ["body", "hand", "face"])
+plt.ylim([-.5, 0])
+
+#%% BODY PARTS VS. NMAN
+
+body = 0
+hand = 1
+face = 2
+tool = 3
+mani = 4
+nman = 5
+chair = 6
+
+fig = plt.figure()
+fig.suptitle("BRAIN REGIONS AND NMAN CORRELATION", color="red")
+
+# ANT LEFT
+plt.subplot(2,4,1)
+plt.title("ITG + Anterior IOG (left)")
+plt.bar(1, ant_left_av[body, nman])
+plt.bar(2, ant_left_av[hand, nman])
+plt.bar(3, ant_left_av[face, nman])
+plt.xticks([1,2,3], ["body", "hand", "face"])
+plt.ylim([-.5, 0])
+
+# ANT RIGHT
+plt.subplot(2,4,2)
+plt.title("ITG + Anterior IOG (right)")
+plt.bar(1, ant_right_av[body, nman])
+plt.bar(2, ant_right_av[hand, nman])
+plt.bar(3, ant_right_av[face, nman])
+plt.xticks([1,2,3], ["body", "hand", "face"])
+plt.ylim([-.5, 0])
+
+# ANT 
+plt.subplot(2,4,3)
+plt.title("ITG + Anterior IOG (both)")
+plt.bar(1, ant_av[body, nman])
+plt.bar(2, ant_av[hand, nman])
+plt.bar(3, ant_av[face, nman])
+plt.xticks([1,2,3], ["body", "hand", "face"])
+plt.ylim([-.5, 0])
+
+# POS
+plt.subplot(2,4,5)
+plt.title("Posterior IOG")
+plt.bar(1, pos_av[body, nman])
+plt.bar(2, pos_av[hand, nman])
+plt.bar(3, pos_av[face, nman])
+plt.xticks([1,2,3], ["body", "hand", "face"])
+plt.ylim([-.5, 0])
+
+# CALC
+plt.subplot(2,4,6)
+plt.title("Calcarine cortex")
+plt.bar(1, calc_av[body, nman])
+plt.bar(2, calc_av[hand, nman])
+plt.bar(3, calc_av[face, nman])
+plt.xticks([1,2,3], ["body", "hand", "face"])
+plt.ylim([-.5, .05])
+
+# OP
+plt.subplot(2,4,7)
+plt.title("Occipitale pole")
+plt.bar(1, op_av[body, nman])
+plt.bar(2, op_av[hand, nman])
+plt.bar(3, op_av[face, nman])
+plt.xticks([1,2,3], ["body", "hand", "face"])
+plt.ylim([-.5, 0])
+
+# OP & CALC
+plt.subplot(2,4,8)
+plt.title("Calcarine cortex + Occipital pole")
+plt.bar(1, op_calc_av[body, nman])
+plt.bar(2, op_calc_av[hand, nman])
+plt.bar(3, op_calc_av[face, nman])
+plt.xticks([1,2,3], ["body", "hand", "face"])
+plt.ylim([-.5, 0])
+
+#%% RDMs %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+###############################################################################
+
+#%% BODY PARTS VS. OBJECTS
+
+body = 0
+hand = 1
+face = 2
+tool = 3
+mani = 4
+nman = 5
+chair = 6
+
+fig = plt.figure()
+fig.suptitle("BRAIN REGIONS AND OBJECTS (tool, mani, nman) DISSIMILARITY (1 - corr)", color="red")
+
+# ANT LEFT
+plt.subplot(2,4,1)
+plt.title("ITG + Anterior IOG (left)")
+plt.bar(1, (rdm_ant_left[body, tool] + rdm_ant_left[body, mani] + rdm_ant_left[body, nman])/3)
+plt.bar(2, (rdm_ant_left[hand, tool] + rdm_ant_left[hand, mani] + rdm_ant_left[hand, nman])/3)
+plt.bar(3, (rdm_ant_left[face, tool] + rdm_ant_left[face, mani] + rdm_ant_left[face, nman])/3)
+plt.xticks([1,2,3], ["body", "hand", "face"])
+plt.ylabel("(1 - corr) dissimilarity")
+plt.ylim(0, 1.5)
+
+# ANT RIGHT
+plt.subplot(2,4,2)
+plt.title("ITG + Anterior IOG (right)")
+plt.bar(1, (rdm_ant_right[body, tool] + rdm_ant_right[body, mani] + rdm_ant_right[body, nman])/3)
+plt.bar(2, (rdm_ant_right[hand, tool] + rdm_ant_right[hand, mani] + rdm_ant_right[hand, nman])/3)
+plt.bar(3, (rdm_ant_right[face, tool] + rdm_ant_right[face, mani] + rdm_ant_right[face, nman])/3)
+plt.xticks([1,2,3], ["body", "hand", "face"])
+plt.ylim(0, 1.5)
+
+# ANT 
+plt.subplot(2,4,3)
+plt.title("ITG + Anterior IOG (both)")
+plt.bar(1, (rdm_ant[body, tool] + rdm_ant[body, mani] + rdm_ant[body, nman])/3)
+plt.bar(2, (rdm_ant[hand, tool] + rdm_ant[hand, mani] + rdm_ant[hand, nman])/3)
+plt.bar(3, (rdm_ant[face, tool] + rdm_ant[face, mani] + rdm_ant[face, nman])/3)
+plt.xticks([1,2,3], ["body", "hand", "face"])
+plt.ylim(0, 1.5)
+
+# POS
+plt.subplot(2,4,5)
+plt.title("Posterior IOG")
+plt.bar(1, (rdm_pos[body, tool] + rdm_pos[body, mani] + rdm_pos[body, nman])/3)
+plt.bar(2, (rdm_pos[hand, tool] + rdm_pos[hand, mani] + rdm_pos[hand, nman])/3)
+plt.bar(3, (rdm_pos[face, tool] + rdm_pos[face, mani] + rdm_pos[face, nman])/3)
+plt.xticks([1,2,3], ["body", "hand", "face"])
+plt.ylabel("(1 - corr) dissimilarity")
+plt.ylim(0, 1.5)
+
+# CALC
+plt.subplot(2,4,6)
+plt.title("Calcarine cortex")
+plt.bar(1, (rdm_calc[body, tool] + rdm_calc[body, mani] + rdm_calc[body, nman])/3)
+plt.bar(2, (rdm_calc[hand, tool] + rdm_calc[hand, mani] + rdm_calc[hand, nman])/3)
+plt.bar(3, (rdm_calc[face, tool] + rdm_calc[face, mani] + rdm_calc[face, nman])/3)
+plt.xticks([1,2,3], ["body", "hand", "face"])
+plt.ylim(0, 1.5)
+
+# OP
+plt.subplot(2,4,7)
+plt.title("Occipitale pole")
+plt.bar(1, (rdm_op[body, tool] + rdm_op[body, mani] + rdm_op[body, nman])/3)
+plt.bar(2, (rdm_op[hand, tool] + rdm_op[hand, mani] + rdm_op[hand, nman])/3)
+plt.bar(3, (rdm_op[face, tool] + rdm_op[face, mani] + rdm_op[face, nman])/3)
+plt.xticks([1,2,3], ["body", "hand", "face"])
+plt.ylim(0, 1.5)
+
+# OP & CALC
+plt.subplot(2,4,8)
+plt.title("Calcarine cortex + Occipital pole")
+plt.bar(1, (rdm_op_calc[body, tool] + rdm_op_calc[body, mani] + rdm_op_calc[body, nman])/3)
+plt.bar(2, (rdm_op_calc[hand, tool] + rdm_op_calc[hand, mani] + rdm_op_calc[hand, nman])/3)
+plt.bar(3, (rdm_op_calc[face, tool] + rdm_op_calc[face, mani] + rdm_op_calc[face, nman])/3)
+plt.xticks([1,2,3], ["body", "hand", "face"])
+plt.ylim(0, 1.5)
+
+#%% BODY PARTS VS. TOOLS
+
+body = 0
+hand = 1
+face = 2
+tool = 3
+mani = 4
+nman = 5
+chair = 6
+
+fig = plt.figure()
+fig.suptitle("BRAIN REGIONS AND TOOLS DISSIMILARITY (1 - corr)", color="red")
+
+# ANT LEFT
+plt.subplot(2,4,1)
+plt.title("ITG + Anterior IOG (left)")
+plt.bar(1, rdm_ant_left[body, tool])
+plt.bar(2, rdm_ant_left[hand, tool])
+plt.bar(3, rdm_ant_left[face, tool])
+plt.xticks([1,2,3], ["body", "hand", "face"])
+plt.ylim([0, 1.5])
+plt.ylabel("(1 - corr) dissimilarity")
+
+# ANT RIGHT
+plt.subplot(2,4,2)
+plt.title("ITG + Anterior IOG (right)")
+plt.bar(1, rdm_ant_right[body, tool])
+plt.bar(2, rdm_ant_right[hand, tool])
+plt.bar(3, rdm_ant_right[face, tool])
+plt.xticks([1,2,3], ["body", "hand", "face"])
+plt.ylim([0, 1.5])
+
+# ANT 
+plt.subplot(2,4,3)
+plt.title("ITG + Anterior IOG (both)")
+plt.bar(1, rdm_ant[body, tool])
+plt.bar(2, rdm_ant[hand, tool])
+plt.bar(3, rdm_ant[face, tool])
+plt.xticks([1,2,3], ["body", "hand", "face"])
+plt.ylim([0, 1.5])
+
+# POS
+plt.subplot(2,4,5)
+plt.title("Posterior IOG")
+plt.bar(1, rdm_pos[body, tool])
+plt.bar(2, rdm_pos[hand, tool])
+plt.bar(3, rdm_pos[face, tool])
+plt.xticks([1,2,3], ["body", "hand", "face"])
+plt.ylabel("(1 - corr) dissimilarity")
+plt.ylim([0, 1.5])
+
+# CALC
+plt.subplot(2,4,6)
+plt.title("Calcarine cortex")
+plt.bar(1, rdm_calc[body, tool])
+plt.bar(2, rdm_calc[hand, tool])
+plt.bar(3, rdm_calc[face, tool])
+plt.xticks([1,2,3], ["body", "hand", "face"])
+plt.ylim([0, 1.5])
+
+# OP
+plt.subplot(2,4,7)
+plt.title("Occipitale pole")
+plt.bar(1, rdm_op[body, tool])
+plt.bar(2, rdm_op[hand, tool])
+plt.bar(3, rdm_op[face, tool])
+plt.xticks([1,2,3], ["body", "hand", "face"])
+plt.ylim([0, 1.5])
+
+# OP & CALC
+plt.subplot(2,4,8)
+plt.title("Calcarine cortex + Occipital pole")
+plt.bar(1, rdm_op_calc[body, tool])
+plt.bar(2, rdm_op_calc[hand, tool])
+plt.bar(3, rdm_op_calc[face, tool])
+plt.xticks([1,2,3], ["body", "hand", "face"])
+plt.ylim([0, 1.5])
+
+#%% BODY PARTS VS. MANI
+
+body = 0
+hand = 1
+face = 2
+tool = 3
+mani = 4
+nman = 5
+chair = 6
+
+fig = plt.figure()
+fig.suptitle("BRAIN REGIONS AND MANI DISSIMILARITY (1 - corr)", color="red")
+
+# ANT LEFT
+plt.subplot(2,4,1)
+plt.title("ITG + Anterior IOG (left)")
+plt.bar(1, rdm_ant_left[body, mani])
+plt.bar(2, rdm_ant_left[hand, mani])
+plt.bar(3, rdm_ant_left[face, mani])
+plt.xticks([1,2,3], ["body", "hand", "face"])
+plt.ylim([0, 1.5])
+plt.ylabel("(1 - corr) dissimilarity")
+
+# ANT RIGHT
+plt.subplot(2,4,2)
+plt.title("ITG + Anterior IOG (right)")
+plt.bar(1, rdm_ant_right[body, mani])
+plt.bar(2, rdm_ant_right[hand, mani])
+plt.bar(3, rdm_ant_right[face, mani])
+plt.xticks([1,2,3], ["body", "hand", "face"])
+plt.ylim([0, 1.5])
+
+# ANT 
+plt.subplot(2,4,3)
+plt.title("ITG + Anterior IOG (both)")
+plt.bar(1, rdm_ant[body, mani])
+plt.bar(2, rdm_ant[hand, mani])
+plt.bar(3, rdm_ant[face, mani])
+plt.xticks([1,2,3], ["body", "hand", "face"])
+plt.ylim([0, 1.5])
+
+# POS
+plt.subplot(2,4,5)
+plt.title("Posterior IOG")
+plt.bar(1, rdm_pos[body, mani])
+plt.bar(2, rdm_pos[hand, mani])
+plt.bar(3, rdm_pos[face, mani])
+plt.xticks([1,2,3], ["body", "hand", "face"])
+plt.ylim([0, 1.5])
+plt.ylabel("(1 - corr) dissimilarity")
+
+# CALC
+plt.subplot(2,4,6)
+plt.title("Calcarine cortex")
+plt.bar(1, rdm_calc[body, mani])
+plt.bar(2, rdm_calc[hand, mani])
+plt.bar(3, rdm_calc[face, mani])
+plt.xticks([1,2,3], ["body", "hand", "face"])
+plt.ylim([0, 1.5])
+
+# OP
+plt.subplot(2,4,7)
+plt.title("Occipitale pole")
+plt.bar(1, rdm_op[body, mani])
+plt.bar(2, rdm_op[hand, mani])
+plt.bar(3, rdm_op[face, mani])
+plt.xticks([1,2,3], ["body", "hand", "face"])
+plt.ylim([0, 1.5])
+
+# OP & CALC
+plt.subplot(2,4,8)
+plt.title("Calcarine cortex + Occipital pole")
+plt.bar(1, rdm_op_calc[body, mani])
+plt.bar(2, rdm_op_calc[hand, mani])
+plt.bar(3, rdm_op_calc[face, mani])
+plt.xticks([1,2,3], ["body", "hand", "face"])
+plt.ylim([0, 1.5])
+
+#%% BODY PARTS VS. NMAN
+
+body = 0
+hand = 1
+face = 2
+tool = 3
+mani = 4
+nman = 5
+chair = 6
+
+fig = plt.figure()
+fig.suptitle("BRAIN REGIONS AND NMAN DISSIMILARITY (1 - corr)", color="red")
+
+# ANT LEFT
+plt.subplot(2,4,1)
+plt.title("ITG + Anterior IOG (left)")
+plt.bar(1, rdm_ant_left[body, nman])
+plt.bar(2, rdm_ant_left[hand, nman])
+plt.bar(3, rdm_ant_left[face, nman])
+plt.xticks([1,2,3], ["body", "hand", "face"])
+plt.ylim([0, 1.5])
+plt.ylabel("(1 - corr) dissimilarity")
+
+# ANT RIGHT
+plt.subplot(2,4,2)
+plt.title("ITG + Anterior IOG (right)")
+plt.bar(1, rdm_ant_right[body, nman])
+plt.bar(2, rdm_ant_right[hand, nman])
+plt.bar(3, rdm_ant_right[face, nman])
+plt.xticks([1,2,3], ["body", "hand", "face"])
+plt.ylim([0, 1.5])
+
+# ANT 
+plt.subplot(2,4,3)
+plt.title("ITG + Anterior IOG (both)")
+plt.bar(1, rdm_ant[body, nman])
+plt.bar(2, rdm_ant[hand, nman])
+plt.bar(3, rdm_ant[face, nman])
+plt.xticks([1,2,3], ["body", "hand", "face"])
+plt.ylim([0, 1.5])
+
+# POS
+plt.subplot(2,4,5)
+plt.title("Posterior IOG")
+plt.bar(1, rdm_pos[body, nman])
+plt.bar(2, rdm_pos[hand, nman])
+plt.bar(3, rdm_pos[face, nman])
+plt.xticks([1,2,3], ["body", "hand", "face"])
+plt.ylim([0, 1.5])
+plt.ylabel("(1 - corr) dissimilarity")
+
+# CALC
+plt.subplot(2,4,6)
+plt.title("Calcarine cortex")
+plt.bar(1, rdm_calc[body, nman])
+plt.bar(2, rdm_calc[hand, nman])
+plt.bar(3, rdm_calc[face, nman])
+plt.xticks([1,2,3], ["body", "hand", "face"])
+plt.ylim([0, 1.5])
+
+# OP
+plt.subplot(2,4,7)
+plt.title("Occipitale pole")
+plt.bar(1, rdm_op[body, nman])
+plt.bar(2, rdm_op[hand, nman])
+plt.bar(3, rdm_op[face, nman])
+plt.xticks([1,2,3], ["body", "hand", "face"])
+plt.ylim([0, 1.5])
+
+# OP & CALC
+plt.subplot(2,4,8)
+plt.title("Calcarine cortex + Occipital pole")
+plt.bar(1, rdm_op_calc[body, nman])
+plt.bar(2, rdm_op_calc[hand, nman])
+plt.bar(3, rdm_op_calc[face, nman])
+plt.xticks([1,2,3], ["body", "hand", "face"])
+plt.ylim([0, 1.5])
+
+#%% Visualize decodings (full matrix)
+
+os.chdir(r"D:\thesis-scripts\Brain\Brain representations")
+decodings = scipy.io.loadmat("decodings_all_confusion_matrix.mat")["confusion_matrix_mean"]
+
+ROIs = ['ITG + ant. IOG', 
+        'ITG + ant. IOG (left)',
+        'ITG + ant. IOG (right)',
+        'Post. IOG', 'Occipital pole', 'Calc. cortex', 'Occip. pole + calc. cortex']
+
+fig = plt.figure()
+fig.suptitle("DECODINGS (LDA classifier) \nBody, hand, face, tool, man, nman, chair")
+
+for _ in range(0, 7):
+    if _ <= 2:
+        plt.subplot(2,4,_+1)
+    else:
+        plt.subplot(2,4,_+2)
+    plt.imshow(decodings[:,:,_])
+    plt.colorbar()
+    plt.clim(0, 7)
+    plt.axis("off")
+    plt.title(ROIs[_])
+
+#%% Visualize decodings (3x3)
+    
+os.chdir(r"D:\thesis-scripts\Brain\Brain representations")
+decodings = scipy.io.loadmat("decodings_objects_confusion_matrix.mat")["confusion_matrix_mean"]
+
+ROIs = ['ITG + ant. IOG', 
+        'ITG + ant. IOG (left)',
+        'ITG + ant. IOG (right)',
+        'Post. IOG', 'Occipital pole', 'Calc. cortex', 'Occip. pole + calc. cortex']
+
+fig = plt.figure()
+fig.suptitle("DECODINGS of only OBJECTS (LDA classifier) \nTool, man, nman")
+
+for _ in range(0, 7):
+    if _ <= 2:
+        plt.subplot(2,4,_+1)
+    else:
+        plt.subplot(2,4,_+2)
+    plt.imshow(decodings[:,:,_])
+    plt.colorbar()
+    plt.clim(0, 4.5)
+    plt.axis("off")
+    plt.title(ROIs[_])
