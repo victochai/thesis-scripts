@@ -7,19 +7,22 @@ import numpy as np
 
 #%% 2.) Cos
 
-os.chdir(r"D:\thesis-scripts\Neural networks\ResNet50\Experiment images\Conv big\l1")
+os.chdir(r"D:\thesis-scripts\Neural networks\ResNet101\Experimental images\Conv big\l1")
 l1 = os.listdir()
-os.chdir(r"D:\thesis-scripts\Neural networks\ResNet50\Experiment images\Conv big\l2")
+os.chdir(r"D:\thesis-scripts\Neural networks\ResNet101\Experimental images\Conv big\l2")
 l2 = os.listdir()
-l = l1+l2
-os.chdir(r"D:\thesis-scripts\Neural networks\ResNet50\Experiment images\Conv big")
-del l1, l2
+os.chdir(r"D:\thesis-scripts\Neural networks\ResNet101\Experimental images\Conv big\l3")
+l3 = os.listdir()
+l = l1+l2+l3
+os.chdir(r"D:\thesis-scripts\Neural networks\ResNet101\Experimental images\Conv big")
+del l1, l2, l3
 
 cos = []
 for _ in l:
     cos.append(loadmat(_)["co"])
 
-rdms = loadmat("rdms_resnet50.mat")["rdms_resnet50"]  
+rdms = loadmat("rdms_resnet101.mat")["rdms_resnet101"]  
+del l
     
 #%% 3.) Cos small
 
@@ -51,14 +54,12 @@ for rdm in rdms:
     rdms_small.append(small)    
 del rdm, small, x, x_ind, y, y_ind
 
-del l
-
 #%% 4.) Visualize corrs
 
 fig = plt.figure()
-fig.suptitle("ResNet-50 (50 layers)\nBody, hand, face, tool, mani, nman, chair")
+fig.suptitle("ResNet-101 (101 layers)\nBody, hand, face, tool, mani, nman, chair")
 for _ in range(0, len(cos)):
-    plt.subplot(5,10,_+1)
+    plt.subplot(8,13,_+1)
     plt.imshow(cos[_])
     plt.colorbar()
     plt.clim([-.25, 1])
@@ -67,12 +68,12 @@ for _ in range(0, len(cos)):
 plt.show()  
 
 fig = plt.figure()
-fig.suptitle("ResNet-50 (50 layers)\nEvery condition is averaged\nBody, hand, face, tool, mani, nman, chair")
+fig.suptitle("ResNet-101 (101 layers)\nEvery condition is averaged\nBody, hand, face, tool, mani, nman, chair")
 for _ in range(0, len(cos_small)):
-    plt.subplot(5,10,_+1)
+    plt.subplot(8,13,_+1)
     plt.imshow(cos_small[_])
     plt.colorbar()
-    plt.clim([.15, 1])
+    plt.clim([.1, 1])
     plt.axis("off")
     plt.title(str(_+1), fontsize=9)
 plt.show()  
@@ -80,9 +81,9 @@ plt.show()
 #%% 5.) Visualize RDMs
 
 fig = plt.figure()
-fig.suptitle("ResNet-50 RDMs (50 layers)\nBody, hand, face, tool, mani, nman, chair")
+fig.suptitle("ResNet-101 RDMs (101 layers)\nBody, hand, face, tool, mani, nman, chair")
 for _ in range(0, len(rdms)):
-    plt.subplot(5,10,_+1)
+    plt.subplot(8,13,_+1)
     plt.imshow(rdms[_])
     plt.colorbar()
     plt.clim([0, 1.25])
@@ -91,19 +92,19 @@ for _ in range(0, len(rdms)):
 plt.show()  
 
 fig = plt.figure()
-fig.suptitle("ResNet-50 RDMs (50 layers)\nEvery condition is averaged\nBody, hand, face, tool, mani, nman, chair")
+fig.suptitle("ResNet-101 RDMs (101 layers)\nEvery condition is averaged\nBody, hand, face, tool, mani, nman, chair")
 for _ in range(0, len(rdms_small)):
-    plt.subplot(5,10,_+1)
+    plt.subplot(8,13,_+1)
     plt.imshow(rdms_small[_])
     plt.colorbar()
-    plt.clim([0, .85])
+    plt.clim([0, .95])
     plt.axis("off")
     plt.title(str(_+1), fontsize=9)
 plt.show()
 
 #%% 6.) Save the results
 
-os.chdir(r"D:\thesis-scripts\Neural networks\ResNet50\Experiment images\Conv small, different averaging")
+os.chdir(r"D:\thesis-scripts\Neural networks\ResNet101\Original images\Conv small, different averaging")
 
 COS_small = {"cos_small" : cos_small}
 RDMS_small = {"rdms_small" : rdms_small}
@@ -129,7 +130,7 @@ chair = 6
 #%% 1.) co_small normalized
 
 fig = plt.figure()
-fig.suptitle("ResNet-50 | BODY PARTS AND OBJECTS CORRELATION | NORMALIZED", color="red")
+fig.suptitle("ResNet-101 | BODY PARTS AND OBJECTS CORRELATION | NORMALIZED", color="red")
 
 plt.subplot(2,2,1)
 plt.title("OBJECTS (tool, mani, nman)")
@@ -140,9 +141,8 @@ plt.plot(body_)
 plt.plot(hand_)
 plt.plot(face_)
 plt.grid()
-plt.legend(["body", ])
-plt.xticks(range(0,50), range(1,51), size=6)
-plt.ylim([-1.77, 0.62])
+plt.xticks(range(0,101,5), range(1,102,5), size=9)
+plt.ylim([-2.3, 1.3])
 plt.legend(["body", "hand", "face"], loc="lower left")
 del body_, hand_, face_
 
@@ -155,9 +155,9 @@ plt.plot(body_)
 plt.plot(hand_)
 plt.plot(face_)
 plt.grid()
-plt.xticks(range(0,50), range(1,51), size=6)
+plt.xticks(range(0,101,5), range(1,102,5), size=9)
 plt.legend(["body", "hand", "face"], loc="lower left")
-plt.ylim([-1.77, 0.62])
+plt.ylim([-2.3, 1.3])
 del body_, hand_, face_
 
 plt.subplot(2,2,3)
@@ -169,9 +169,9 @@ plt.plot(body_)
 plt.plot(hand_)
 plt.plot(face_)
 plt.grid()
-plt.xticks(range(0,50), range(1,51), size=6)
+plt.xticks(range(0,101,5), range(1,102,5), size=9)
 plt.legend(["body", "hand", "face"], loc="lower left")
-plt.ylim([-1.77, 0.62])
+plt.ylim([-2.3, 1.3])
 del body_, hand_, face_
 
 plt.subplot(2,2,4)
@@ -183,9 +183,9 @@ plt.plot(body_)
 plt.plot(hand_)
 plt.plot(face_)
 plt.grid()
-plt.xticks(range(0,50), range(1,51), size=6)
+plt.xticks(range(0,101,5), range(1,102,5), size=9)
 plt.legend(["body", "hand", "face"], loc="lower left")
-plt.ylim([-1.77, 0.62])
+plt.ylim([-2.3, 1.3])
 del body_, hand_, face_
 
 #%% 2.) rdms from normalized co_small
@@ -195,7 +195,7 @@ for _ in cos_small_normalized:
     rdms_small_normalized.append(1 - _)
     
 fig = plt.figure()
-fig.suptitle("ResNet-50 | BODY PARTS AND OBJECTS dissimilarities (from normalized split-half corr.)", color="red")
+fig.suptitle("ResNet-101 | BODY PARTS AND OBJECTS dissimilarities (from normalized split-half corr.)", color="red")
 
 plt.subplot(2,2,1)
 plt.title("OBJECTS (tool, mani, nman)")
@@ -206,8 +206,8 @@ plt.plot(body_)
 plt.plot(hand_)
 plt.plot(face_)
 plt.grid()
-plt.xticks(range(0,50), range(1,51), size=6)
-plt.ylim([-0.2, 2.8])
+plt.xticks(range(0,101,5), range(1,102,5), size=9)
+plt.ylim([-0.3, 3.3])
 plt.legend(["body", "hand", "face"], loc="lower left")
 del body_, hand_, face_
 
@@ -220,9 +220,9 @@ plt.plot(body_)
 plt.plot(hand_)
 plt.plot(face_)
 plt.grid()
-plt.xticks(range(0,50), range(1,51), size=6)
+plt.xticks(range(0,101,5), range(1,102,5), size=9)
 plt.legend(["body", "hand", "face"], loc="lower left")
-plt.ylim([-0.2, 2.8])
+plt.ylim([-0.3, 3.3])
 del body_, hand_, face_
 
 plt.subplot(2,2,3)
@@ -234,9 +234,9 @@ plt.plot(body_)
 plt.plot(hand_)
 plt.plot(face_)
 plt.grid()
-plt.xticks(range(0,50), range(1,51), size=6)
+plt.xticks(range(0,101,5), range(1,102,5), size=9)
 plt.legend(["body", "hand", "face"], loc="lower left")
-plt.ylim([-0.2, 2.8])
+plt.ylim([-0.3, 3.3])
 del body_, hand_, face_
 
 plt.subplot(2,2,4)
@@ -248,15 +248,15 @@ plt.plot(body_)
 plt.plot(hand_)
 plt.plot(face_)
 plt.grid()
-plt.xticks(range(0,50), range(1,51), size=6)
+plt.xticks(range(0,101,5), range(1,102,5), size=9)
 plt.legend(["body", "hand", "face"], loc="lower left")
-plt.ylim([-0.2, 2.8])
+plt.ylim([-0.3, 3.3])
 del body_, hand_, face_    
 
 #%% 3.) rdms from NON-normalized co_small
     
 fig = plt.figure()
-fig.suptitle("ResNet-50 | BODY PARTS AND OBJECTS dissimilarities", color="red")
+fig.suptitle("ResNet-101 | BODY PARTS AND OBJECTS dissimilarities", color="red")
 
 plt.subplot(2,2,1)
 plt.title("OBJECTS (tool, mani, nman)")
@@ -267,8 +267,8 @@ plt.plot(body_)
 plt.plot(hand_)
 plt.plot(face_)
 plt.grid()
-plt.xticks(range(0,50), range(1,51), size=6)
-plt.ylim([0, .85])
+plt.xticks(range(0,101,5), range(1,102,5), size=9)
+plt.ylim([0, .93])
 plt.legend(["body", "hand", "face"], loc="lower right")
 del body_, hand_, face_
 
@@ -281,9 +281,9 @@ plt.plot(body_)
 plt.plot(hand_)
 plt.plot(face_)
 plt.grid()
-plt.xticks(range(0,50), range(1,51), size=6)
+plt.xticks(range(0,101,5), range(1,102,5), size=9)
 plt.legend(["body", "hand", "face"], loc="lower right")
-plt.ylim([0, .85])
+plt.ylim([0, .93])
 del body_, hand_, face_
 
 plt.subplot(2,2,3)
@@ -295,9 +295,9 @@ plt.plot(body_)
 plt.plot(hand_)
 plt.plot(face_)
 plt.grid()
-plt.xticks(range(0,50), range(1,51), size=6)
+plt.xticks(range(0,101,5), range(1,102,5), size=9)
 plt.legend(["body", "hand", "face"], loc="lower right")
-plt.ylim([0, .85])
+plt.ylim([0, .93])
 del body_, hand_, face_
 
 plt.subplot(2,2,4)
@@ -309,9 +309,9 @@ plt.plot(body_)
 plt.plot(hand_)
 plt.plot(face_)
 plt.grid()
-plt.xticks(range(0,50), range(1,51), size=6)
+plt.xticks(range(0,101,5), range(1,102,5), size=9)
 plt.legend(["body", "hand", "face"], loc="lower right")
-plt.ylim([0, .85])
+plt.ylim([0, .93])
 del body_, hand_, face_    
 
 #%% ORIGINAL IMAGES %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -321,12 +321,14 @@ from scipy.io import loadmat, savemat
 import matplotlib.pyplot as plt
 import os
 import numpy as np
-os.chdir(r"D:\thesis-scripts\Neural networks\ResNet50\Original images\Conv big, original images")
+os.chdir(r"D:\thesis-scripts\Neural networks\ResNet101\Original images\Conv big, original")
 l = os.listdir()
-cos = [loadmat(l[_])["co"] for _ in range(0, 50)]
+
+cos = [loadmat(l[_])["co"] for _ in range(0, 101)]
 rdms = [(1-_) for _ in cos]
-os.chdir(r"D:\thesis-scripts\Neural networks\ResNet50\Original images\Conv small, different averaging, original images")
-cos_small = loadmat("cos_small_original.mat")["cos_small"]
+
+os.chdir(r"D:\thesis-scripts\Neural networks\ResNet101\Original images\Conv small, different averaging, original images")
+cos_small = loadmat("cos_small_original.mat")["cos_small_original"]
 
 rdms_small = []
 for rdm in rdms:
@@ -345,23 +347,23 @@ del rdm, small, x, x_ind, y, y_ind
 #%% Visualize
 
 fig = plt.figure()
-fig.suptitle("ResNet-50 (50 layers) | ORIGINAL IMAGES \nBody, hand, face, tool, mani, nman, chair")
+fig.suptitle("ResNet-101 (101 layers) | ORIGINAL IMAGES \nBody, hand, face, tool, mani, nman, chair")
 for _ in range(0, len(cos)):
-    plt.subplot(5,10,_+1)
+    plt.subplot(8,13,_+1)
     plt.imshow(cos[_])
     plt.colorbar()
-    plt.clim([-.25, 1])
+    plt.clim([-.30, 1])
     plt.axis("off")
     plt.title(str(_+1), fontsize=9)
 plt.show()  
 
 fig = plt.figure()
-fig.suptitle("ResNet-50 (50 layers) | ORIGINAL IMAGES\nEvery condition is averaged\nBody, hand, face, tool, mani, nman, chair")
+fig.suptitle("ResNet-101 (101 layers) | ORIGINAL IMAGES\nEvery condition is averaged\nBody, hand, face, tool, mani, nman, chair")
 for _ in range(0, len(cos_small)):
-    plt.subplot(5,10,_+1)
+    plt.subplot(8,13,_+1)
     plt.imshow(cos_small[_])
     plt.colorbar()
-    plt.clim([0.1, .95])
+    plt.clim([0, .96])
     plt.axis("off")
     plt.title(str(_+1), fontsize=9)
 plt.show()
@@ -369,23 +371,23 @@ plt.show()
 #%% RDMS
 
 fig = plt.figure()
-fig.suptitle("ResNet-50 RDMs (50 layers) | ORIGINAL IMAGES\nBody, hand, face, tool, mani, nman, chair")
+fig.suptitle("ResNet-101 RDMs (101 layers) | ORIGINAL IMAGES\nBody, hand, face, tool, mani, nman, chair")
 for _ in range(0, len(rdms)):
-    plt.subplot(5,10,_+1)
+    plt.subplot(8,13,_+1)
     plt.imshow(rdms[_])
     plt.colorbar()
-    plt.clim([0, 1.2])
+    plt.clim([0, 1.25])
     plt.axis("off")
     plt.title(str(_+1), fontsize=9)
 plt.show()  
 
 fig = plt.figure()
-fig.suptitle("ResNet-50 RDMs (50 layers) | ORIGINAL IMAGES\nEvery condition is averaged\nBody, hand, face, tool, mani, nman, chair")
+fig.suptitle("ResNet-101 RDMs (101 layers) | ORIGINAL IMAGES\nEvery condition is averaged\nBody, hand, face, tool, mani, nman, chair")
 for _ in range(0, len(rdms_small)):
-    plt.subplot(5,10,_+1)
+    plt.subplot(8,13,_+1)
     plt.imshow(rdms_small[_])
     plt.colorbar()
-#    plt.clim([0, .9])
+    plt.clim([0, .96])
     plt.axis("off")
     plt.title(str(_+1), fontsize=9)
 plt.show()
@@ -393,7 +395,7 @@ plt.show()
 #%% 1.) co_small normalized
 
 fig = plt.figure()
-fig.suptitle("ResNet-50 | BODY PARTS AND OBJECTS CORRELATION | NORMALIZED \n ORIGINAL IMAGES", color="red")
+fig.suptitle("ResNet-101 | BODY PARTS AND OBJECTS CORRELATION | NORMALIZED \n ORIGINAL IMAGES", color="red")
 
 plt.subplot(2,2,1)
 plt.title("OBJECTS (tool, mani, nman)")
@@ -405,8 +407,8 @@ plt.plot(hand_)
 plt.plot(face_)
 plt.grid()
 plt.legend(["body", ])
-plt.xticks(range(0,50), range(1,51), size=6)
-plt.ylim([-1.55, 1.82])
+plt.xticks(range(0,101,5), range(1,102,5), size=9)
+plt.ylim([-1.75, 1.82])
 plt.legend(["body", "hand", "face"], loc="top right")
 del body_, hand_, face_
 
@@ -419,9 +421,9 @@ plt.plot(body_)
 plt.plot(hand_)
 plt.plot(face_)
 plt.grid()
-plt.xticks(range(0,50), range(1,51), size=6)
+plt.xticks(range(0,101,5), range(1,102,5), size=9)
 plt.legend(["body", "hand", "face"], loc="top right")
-plt.ylim([-1.55, 1.82])
+plt.ylim([-1.75, 1.82])
 del body_, hand_, face_
 
 plt.subplot(2,2,3)
@@ -433,9 +435,9 @@ plt.plot(body_)
 plt.plot(hand_)
 plt.plot(face_)
 plt.grid()
-plt.xticks(range(0,50), range(1,51), size=6)
+plt.xticks(range(0,101,5), range(1,102,5), size=9)
 plt.legend(["body", "hand", "face"], loc="top right")
-plt.ylim([-1.55, 1.82])
+plt.ylim([-1.75, 1.82])
 del body_, hand_, face_
 
 plt.subplot(2,2,4)
@@ -447,9 +449,9 @@ plt.plot(body_)
 plt.plot(hand_)
 plt.plot(face_)
 plt.grid()
-plt.xticks(range(0,50), range(1,51), size=6)
+plt.xticks(range(0,101,5), range(1,102,5), size=9)
 plt.legend(["body", "hand", "face"], loc="top right")
-plt.ylim([-1.55, 1.82])
+plt.ylim([-1.75, 1.82])
 del body_, hand_, face_
 
 #%% 2.) rdms from normalized co_small
@@ -459,7 +461,7 @@ for _ in cos_small_normalized:
     rdms_small_normalized.append(1 - _)
     
 fig = plt.figure()
-fig.suptitle("ResNet-50 | BODY PARTS AND OBJECTS dissimilarities (from normalized split-half corr.) \n ORIGINAL IMAGES", color="red")
+fig.suptitle("ResNet-101 | BODY PARTS AND OBJECTS dissimilarities (from normalized split-half corr.) \n ORIGINAL IMAGES", color="red")
 
 plt.subplot(2,2,1)
 plt.title("OBJECTS (tool, mani, nman)")
@@ -471,8 +473,8 @@ plt.plot(hand_)
 plt.plot(face_)
 plt.grid()
 plt.legend(["body", ])
-plt.xticks(range(0,50), range(1,51), size=6)
-plt.ylim([-0.77, 2.6])
+plt.xticks(range(0,101,5), range(1,102,5), size=9)
+plt.ylim([-0.77, 2.7])
 plt.legend(["body", "hand", "face"], loc="lower right")
 del body_, hand_, face_
 
@@ -485,9 +487,9 @@ plt.plot(body_)
 plt.plot(hand_)
 plt.plot(face_)
 plt.grid()
-plt.xticks(range(0,50), range(1,51), size=6)
+plt.xticks(range(0,101,5), range(1,102,5), size=9)
 plt.legend(["body", "hand", "face"], loc="lower right")
-plt.ylim([-0.77, 2.6])
+plt.ylim([-0.77, 2.7])
 del body_, hand_, face_
 
 plt.subplot(2,2,3)
@@ -499,9 +501,9 @@ plt.plot(body_)
 plt.plot(hand_)
 plt.plot(face_)
 plt.grid()
-plt.xticks(range(0,50), range(1,51), size=6)
+plt.xticks(range(0,101,5), range(1,102,5), size=9)
 plt.legend(["body", "hand", "face"], loc="lower right")
-plt.ylim([-0.77, 2.6])
+plt.ylim([-0.77, 2.7])
 del body_, hand_, face_
 
 plt.subplot(2,2,4)
@@ -513,15 +515,15 @@ plt.plot(body_)
 plt.plot(hand_)
 plt.plot(face_)
 plt.grid()
-plt.xticks(range(0,50), range(1,51), size=6)
+plt.xticks(range(0,101,5), range(1,102,5), size=9)
 plt.legend(["body", "hand", "face"], loc="lower right")
-plt.ylim([-0.77, 2.6])
+plt.ylim([-0.77, 2.7])
 del body_, hand_, face_    
 
 #%% 3.) rdms from NON-normalized co_small
     
 fig = plt.figure()
-fig.suptitle("ResNet-50 | BODY PARTS AND OBJECTS dissimilarities \n ORIGINAL IMAGES", color="red")
+fig.suptitle("ResNet-101 | BODY PARTS AND OBJECTS dissimilarities \n ORIGINAL IMAGES", color="red")
 
 plt.subplot(2,2,1)
 plt.title("OBJECTS (tool, mani, nman)")
@@ -532,8 +534,8 @@ plt.plot(body_)
 plt.plot(hand_)
 plt.plot(face_)
 plt.grid()
-plt.xticks(range(0,50), range(1,51), size=6)
-plt.ylim([0.07, .9])
+plt.xticks(range(0,101,5), range(1,102,5), size=9)
+plt.ylim([0, .95])
 plt.legend(["body", "hand", "face"], loc="lower right")
 del body_, hand_, face_
 
@@ -546,9 +548,9 @@ plt.plot(body_)
 plt.plot(hand_)
 plt.plot(face_)
 plt.grid()
-plt.xticks(range(0,50), range(1,51), size=6)
+plt.xticks(range(0,101,5), range(1,102,5), size=9)
 plt.legend(["body", "hand", "face"], loc="lower right")
-plt.ylim([0.07, .9])
+plt.ylim([0, .95])
 del body_, hand_, face_
 
 plt.subplot(2,2,3)
@@ -560,9 +562,9 @@ plt.plot(body_)
 plt.plot(hand_)
 plt.plot(face_)
 plt.grid()
-plt.xticks(range(0,50), range(1,51), size=6)
+plt.xticks(range(0,101,5), range(1,102,5), size=9)
 plt.legend(["body", "hand", "face"], loc="lower right")
-plt.ylim([0.07, .9])
+plt.ylim([0, .95])
 del body_, hand_, face_
 
 plt.subplot(2,2,4)
@@ -574,7 +576,7 @@ plt.plot(body_)
 plt.plot(hand_)
 plt.plot(face_)
 plt.grid()
-plt.xticks(range(0,50), range(1,51), size=6)
+plt.xticks(range(0,101,5), range(1,102,5), size=9)
 plt.legend(["body", "hand", "face"], loc="lower right")
-plt.ylim([0.07, .9])
+plt.ylim([0, .95])
 del body_, hand_, face_   
