@@ -1,196 +1,557 @@
-#%% Modules
+#%% LOAD
 
-import scipy.io
+import os
+from scipy.io import loadmat, savemat
 import matplotlib.pyplot as plt
 import numpy as np
-import pathlib 
-import os
 
-current_dir = r"C:\Users\victo\Desktop\nns_for_thesis"
-os.chdir(current_dir)
-p = pathlib.Path.cwd()
+#%% 2.) Cos
 
-#%% Inception layers (if needed)
+os.chdir(r"D:\thesis-scripts\Neural networks\InceptionV3\Experimental images\Conv small, different averaging")
 
-# Layers
-a = [(("mod_A" + str(_) + " ") * 3).split(" ") for _ in range(1,4)]
-a = [_[:-1] for _ in a]
-a = [val for sublist in a for val in sublist]
+#cos = []
+#for _ in l:
+#    cos.append(loadmat(_)["co"])
 
-norm1 = [("n1_" + str(_) + " ").split(" ") for _ in range(1,4)]
-norm1 = [_[:-1] for _ in norm1]
-norm1 = [val for sublist in norm1 for val in sublist]
+#rdms = loadmat("rdms_resnet101.mat")["rdms_resnet101"]  
+#del l
 
-b = [(("mod_B" + str(_) + " ") * 5).split(" ") for _ in range(1,5)]
-b = [_[:-1] for _ in b]
-b = [val for sublist in b for val in sublist]
-
-norm2 = [("n2_" + str(_) + " ").split(" ") for _ in range(1,5)]
-norm2 = [_[:-1] for _ in norm2]
-norm2 = [val for sublist in norm2 for val in sublist]
-
-c = [(("mod_C" + str(_) + " ") * 3).split(" ") for _ in range(1,3)]
-c = [_[:-1] for _ in c]
-c = [val for sublist in c for val in sublist]
-
-layers = ["conv1", "conv2", "conv3", "conv4", "conv5"] + a + norm1 + b + norm2 + c
-layers.append("FC")
-
-del a, b, c, norm1, norm2
-
-#%% Correlations between body parts and objects
-
-mat = scipy.io.loadmat('correlations_INC_original.mat')
-mat = mat["correlations_INC"]
-
-body_objects = []
-body_tool = []
-body_man = []
-body_nman = []
-
-for _ in range(0,3):
-    body_objects.append(mat[0][0][_][0])
-    body_tool.append(mat[1][0][_][0])
-    body_man.append(mat[2][0][_][0])
-    body_nman.append(mat[3][0][_][0])
+cos_small = loadmat("cos_small.mat")["cos_small"]
+rdms_small = [1-co_small for co_small in cos_small]
     
-#%% Visualization
-    
-# Objects
-for _ in range(0,3):
-    plt.plot(body_objects[_][:,0],'-o')
-plt.grid()
-plt.ylim((0,1))
-# plt.xticks(list(range(0,48)), list(range(1,49)))
-plt.xticks(list(range(0,48)), layers, rotation=80, fontsize=8)
-plt.xlabel("Layer") 
-plt.ylabel("Correlation")
-plt.title("Correlation between different body parts and objects (tools + manipulable + nonmanipulable) in InceptionV3 layers")
-plt.legend(("bodies", "hands", "faces"), loc='lower left')
-plt.show()
+#%% 3.) Cos small
 
-# Tools
-for _ in range(0,3):
-    plt.plot(body_tool[_][:,0],'-o')
-plt.grid()
-plt.ylim((0,1))
-# plt.xticks(list(range(0,48)), list(range(1,49)))
-plt.xticks(list(range(0,48)), layers, rotation=80, fontsize=8)
-plt.xlabel("Layer")
-plt.ylabel("Correlation")
-plt.title("Correlation between different body parts and tools in InceptionV3 layers")
-plt.legend(("bodies", "hands", "faces"), loc='lower left')
-plt.show()
+#cos_small = []
+#for co in cos:
+#    x_ind = -48
+#    y_ind = -48
+#    small = np.zeros((7, 7))
+#    for x in range(0, 7):
+#        x_ind += 48
+#        y_ind = - 48
+#        for y in range(0, 7):
+#            y_ind += 48
+#            small[x, y] = np.mean(co[0+x_ind:48+x_ind, 0+y_ind:48+y_ind])
+#    cos_small.append(small)    
+#del co, small, x, x_ind, y, y_ind
+#
+#rdms_small = []
+#for rdm in rdms:
+#    x_ind = -48
+#    y_ind = -48
+#    small = np.zeros((7, 7))
+#    for x in range(0, 7):
+#        x_ind += 48
+#        y_ind = - 48
+#        for y in range(0, 7):
+#            y_ind += 48
+#            small[x, y] = np.mean(rdm[0+x_ind:48+x_ind, 0+y_ind:48+y_ind])
+#    rdms_small.append(small)    
+#del rdm, small, x, x_ind, y, y_ind
 
-# Man
-for _ in range(0,3):
-    plt.plot(body_man[_][:,0],'-o')
-    plt.grid()
-plt.ylim((0,1))
-# plt.xticks(list(range(0,48)), list(range(1,49)))
-plt.xticks(list(range(0,48)), layers, rotation=80, fontsize=8)
-plt.xlabel("Layer")
-plt.ylabel("Correlation")
-plt.title("Correlation between different body parts and manipulable objects in InceptionV3 layers")
-plt.legend(("bodies", "hands", "faces"), loc='lower left')
-plt.show()
+#%% 4.) Visualize corrs
 
-# NMan
-for _ in range(0,3):
-    plt.plot(body_nman[_][:,0],'-o')
-plt.grid()
-plt.ylim((0,1))
-# plt.xticks(list(range(0,48)), list(range(1,49)))
-plt.xticks(list(range(0,48)), layers, rotation=80, fontsize=8)
-plt.xlabel("Layer")
-plt.ylabel("Correlation")
-plt.title("Correlation between different body parts and nonmanipulable objects in InceptionV3 layers")
-plt.legend(("bodies", "hands", "faces"), loc='lower left')
-plt.show()
-
-#%% Plot all
+#fig = plt.figure()
+#fig.suptitle("ResNet-101 (101 layers)\nBody, hand, face, tool, mani, nman, chair")
+#for _ in range(0, len(cos)):
+#    plt.subplot(8,13,_+1)
+#    plt.imshow(cos[_])
+#    plt.colorbar()
+#    plt.clim([-.25, 1])
+#    plt.axis("off")
+#    plt.title(str(_+1), fontsize=9)
+#plt.show()  
 
 fig = plt.figure()
-fig.suptitle("INCEPTION V3 | ORIGINAL IMAGES")
-# 1
+fig.suptitle("INCEPTION-V3 (48 layers)\nEvery condition is averaged\nBody, hand, face, tool, mani, nman, chair")
+for _ in range(0, len(cos_small)):
+    plt.subplot(6,8,_+1)
+    plt.imshow(cos_small[_])
+    plt.colorbar()
+    plt.clim([.1, .95])
+    plt.axis("off")
+    plt.title(str(_+1), fontsize=9)
+plt.show()  
+
+#%% 5.) Visualize RDMs
+
+#fig = plt.figure()
+#fig.suptitle("ResNet-101 RDMs (101 layers)\nBody, hand, face, tool, mani, nman, chair")
+#for _ in range(0, len(rdms)):
+#    plt.subplot(8,13,_+1)
+#    plt.imshow(rdms[_])
+#    plt.colorbar()
+#    plt.clim([0, 1.25])
+#    plt.axis("off")
+#    plt.title(str(_+1), fontsize=9)
+#plt.show()  
+
+fig = plt.figure()
+fig.suptitle("INCEPTION-V3 (48 layers)\nEvery condition is averaged\nBody, hand, face, tool, mani, nman, chair")
+for _ in range(0, len(rdms_small)):
+    plt.subplot(6,8,_+1)
+    plt.imshow(rdms_small[_])
+    plt.colorbar()
+    plt.clim([0, .97])
+    plt.axis("off")
+    plt.title(str(_+1), fontsize=9)
+plt.show()
+
+#%% 6.) Save the results
+
+COS_small = {"cos_small" : cos_small}
+RDMS_small = {"rdms_small" : rdms_small}
+
+savemat("COS_small.mat", COS_small)
+savemat("RDMS_small.mat", RDMS_small)
+
+#%% BODY PARTS VS. OBJECTS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+##%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+cos_small_normalized = []
+for _ in cos_small:
+    cos_small_normalized.append((_ - np.mean(_)) / np.std(_))
+
+body = 0
+hand = 1
+face = 2
+tool = 3
+mani = 4
+nman = 5
+chair = 6
+
+#%% 1.) co_small normalized
+
+fig = plt.figure()
+fig.suptitle("INCEPTION-V3 | BODY PARTS AND OBJECTS CORRELATION | NORMALIZED", color="red")
+
 plt.subplot(2,2,1)
-for _ in range(0,3):
-    plt.plot(body_objects[_][:,0],'-o')
+plt.title("OBJECTS (tool, mani, nman)")
+body_ = [(co_small[body, tool] + co_small[body, mani] + co_small[body, nman])/3 for co_small in cos_small_normalized]
+hand_ = [(co_small[hand, tool] + co_small[hand, mani] + co_small[hand, nman])/3 for co_small in cos_small_normalized]
+face_ = [(co_small[face, tool] + co_small[face, mani] + co_small[face, nman])/3 for co_small in cos_small_normalized]
+plt.plot(body_)
+plt.plot(hand_)
+plt.plot(face_)
 plt.grid()
-plt.ylim((0,1))
-plt.xticks(list(range(0,48)), list(range(1,49)), fontsize=6)
-# plt.xticks(list(range(0,48)), layers, rotation=80, fontsize=8)
-plt.ylabel("Correlation")
-plt.title("Correlation between different body parts and objects\n(tools + manipulable + nonmanipulable) in InceptionV3 layers")
-plt.legend(("bodies", "hands", "faces"), loc='lower left')
-plt.show()
-# 2
+plt.xticks(range(0,48), range(1,49), size=6)
+plt.ylim([-1.9, 1.05])
+plt.legend(["body", "hand", "face"], loc="lower left")
+del body_, hand_, face_
+
 plt.subplot(2,2,2)
-for _ in range(0,3):
-    plt.plot(body_tool[_][:,0],'-o')
+plt.title("TOOLS")
+body_ = [co_small[body, tool] for co_small in cos_small_normalized]
+hand_ = [co_small[hand, tool] for co_small in cos_small_normalized]
+face_ = [co_small[face, tool] for co_small in cos_small_normalized]
+plt.plot(body_)
+plt.plot(hand_)
+plt.plot(face_)
 plt.grid()
-plt.ylim((0,1))
-plt.xticks(list(range(0,48)), list(range(1,49)), fontsize=6)
-# plt.xticks(list(range(0,48)), layers, rotation=80, fontsize=8)
-plt.ylabel("Correlation")
-plt.title("Correlation between different body parts and tools in InceptionV3 layers")
-plt.legend(("bodies", "hands", "faces"), loc='lower left')
-plt.show()
-# 3
+plt.xticks(range(0,48), range(1,49), size=6)
+plt.legend(["body", "hand", "face"], loc="lower left")
+plt.ylim([-1.9, 1.05])
+del body_, hand_, face_
+
 plt.subplot(2,2,3)
-for _ in range(0,3):
-    plt.plot(body_man[_][:,0],'-o')
+plt.title("MANI")
+body_ = [co_small[body, mani] for co_small in cos_small_normalized]
+hand_ = [co_small[hand, mani] for co_small in cos_small_normalized]
+face_ = [co_small[face, mani] for co_small in cos_small_normalized]
+plt.plot(body_)
+plt.plot(hand_)
+plt.plot(face_)
 plt.grid()
-plt.ylim((0,1))
-plt.xticks(list(range(0,48)), list(range(1,49)), fontsize=6)
-# plt.xticks(list(range(0,48)), layers, rotation=80, fontsize=8)
-plt.ylabel("Correlation")
-plt.title("Correlation between different body parts and manipulable objects in InceptionV3 layers")
-plt.legend(("bodies", "hands", "faces"), loc='lower left')
-plt.show()
-# 4
+plt.xticks(range(0,48), range(1,49), size=6)
+plt.legend(["body", "hand", "face"], loc="lower left")
+plt.ylim([-1.9, 1.05])
+del body_, hand_, face_
+
 plt.subplot(2,2,4)
-for _ in range(0,3):
-    plt.plot(body_nman[_][:,0],'-o')
+plt.title("NMAN")
+body_ = [co_small[body, nman] for co_small in cos_small_normalized]
+hand_ = [co_small[hand, nman] for co_small in cos_small_normalized]
+face_ = [co_small[face, nman] for co_small in cos_small_normalized]
+plt.plot(body_)
+plt.plot(hand_)
+plt.plot(face_)
 plt.grid()
-plt.ylim((0,1))
-plt.xticks(list(range(0,48)), list(range(1,49)), fontsize=6)
-# plt.xticks(list(range(0,48)), layers, rotation=80, fontsize=8)
-plt.ylabel("Correlation")
-plt.title("Correlation between different body parts and nonmanipulable objects in InceptionV3 layers")
-plt.legend(("bodies", "hands", "faces"), loc='lower left')
+plt.xticks(range(0,48), range(1,49), size=6)
+plt.legend(["body", "hand", "face"], loc="lower left")
+plt.ylim([-1.9, 1.05])
+del body_, hand_, face_
+
+#%% 2.) rdms from normalized co_small
+
+rdms_small_normalized = []
+for _ in cos_small_normalized:
+    rdms_small_normalized.append(1 - _)
+    
+fig = plt.figure()
+fig.suptitle("INCEPTION-V3 | BODY PARTS AND OBJECTS dissimilarities (from normalized split-half corr.)", color="red")
+
+plt.subplot(2,2,1)
+plt.title("OBJECTS (tool, mani, nman)")
+body_ = [(co_small[body, tool] + co_small[body, mani] + co_small[body, nman])/3 for co_small in rdms_small_normalized]
+hand_ = [(co_small[hand, tool] + co_small[hand, mani] + co_small[hand, nman])/3 for co_small in rdms_small_normalized]
+face_ = [(co_small[face, tool] + co_small[face, mani] + co_small[face, nman])/3 for co_small in rdms_small_normalized]
+plt.plot(body_)
+plt.plot(hand_)
+plt.plot(face_)
+plt.grid()
+plt.xticks(range(0,48), range(1,49), size=6)
+plt.ylim([-0.1, 2.95])
+plt.legend(["body", "hand", "face"], loc="lower right")
+del body_, hand_, face_
+
+plt.subplot(2,2,2)
+plt.title("TOOLS")
+body_ = [co_small[body, tool] for co_small in rdms_small_normalized]
+hand_ = [co_small[hand, tool] for co_small in rdms_small_normalized]
+face_ = [co_small[face, tool] for co_small in rdms_small_normalized]
+plt.plot(body_)
+plt.plot(hand_)
+plt.plot(face_)
+plt.grid()
+plt.xticks(range(0,48), range(1,49), size=6)
+plt.legend(["body", "hand", "face"], loc="lower right")
+plt.ylim([-0.1, 2.95])
+del body_, hand_, face_
+
+plt.subplot(2,2,3)
+plt.title("MANI")
+body_ = [co_small[body, mani] for co_small in rdms_small_normalized]
+hand_ = [co_small[hand, mani] for co_small in rdms_small_normalized]
+face_ = [co_small[face, mani] for co_small in rdms_small_normalized]
+plt.plot(body_)
+plt.plot(hand_)
+plt.plot(face_)
+plt.grid()
+plt.xticks(range(0,48), range(1,49), size=6)
+plt.legend(["body", "hand", "face"], loc="lower right")
+plt.ylim([-0.1, 2.95])
+del body_, hand_, face_
+
+plt.subplot(2,2,4)
+plt.title("NMAN")
+body_ = [co_small[body, nman] for co_small in rdms_small_normalized]
+hand_ = [co_small[hand, nman] for co_small in rdms_small_normalized]
+face_ = [co_small[face, nman] for co_small in rdms_small_normalized]
+plt.plot(body_)
+plt.plot(hand_)
+plt.plot(face_)
+plt.grid()
+plt.xticks(range(0,48), range(1,49), size=6)
+plt.legend(["body", "hand", "face"], loc="lower right")
+plt.ylim([-0.1, 2.95])
+del body_, hand_, face_    
+
+#%% 3.) rdms from NON-normalized co_small
+    
+fig = plt.figure()
+fig.suptitle("INCEPTION-V3 | BODY PARTS AND OBJECTS dissimilarities", color="red")
+
+plt.subplot(2,2,1)
+plt.title("OBJECTS (tool, mani, nman)")
+body_ = [(co_small[body, tool] + co_small[body, mani] + co_small[body, nman])/3 for co_small in rdms_small]
+hand_ = [(co_small[hand, tool] + co_small[hand, mani] + co_small[hand, nman])/3 for co_small in rdms_small]
+face_ = [(co_small[face, tool] + co_small[face, mani] + co_small[face, nman])/3 for co_small in rdms_small]
+plt.plot(body_)
+plt.plot(hand_)
+plt.plot(face_)
+plt.grid()
+plt.xticks(range(0,48), range(1,49), size=6)
+plt.ylim([0.05, .95])
+plt.legend(["body", "hand", "face"], loc="lower right")
+del body_, hand_, face_
+
+plt.subplot(2,2,2)
+plt.title("TOOLS")
+body_ = [co_small[body, tool] for co_small in rdms_small]
+hand_ = [co_small[hand, tool] for co_small in rdms_small]
+face_ = [co_small[face, tool] for co_small in rdms_small]
+plt.plot(body_)
+plt.plot(hand_)
+plt.plot(face_)
+plt.grid()
+plt.xticks(range(0,48), range(1,49), size=6)
+plt.legend(["body", "hand", "face"], loc="lower right")
+plt.ylim([0.05, .95])
+del body_, hand_, face_
+
+plt.subplot(2,2,3)
+plt.title("MANI")
+body_ = [co_small[body, mani] for co_small in rdms_small]
+hand_ = [co_small[hand, mani] for co_small in rdms_small]
+face_ = [co_small[face, mani] for co_small in rdms_small]
+plt.plot(body_)
+plt.plot(hand_)
+plt.plot(face_)
+plt.grid()
+plt.xticks(range(0,48), range(1,49), size=6)
+plt.legend(["body", "hand", "face"], loc="lower right")
+plt.ylim([0.05, .95])
+del body_, hand_, face_
+
+plt.subplot(2,2,4)
+plt.title("NMAN")
+body_ = [co_small[body, nman] for co_small in rdms_small]
+hand_ = [co_small[hand, nman] for co_small in rdms_small]
+face_ = [co_small[face, nman] for co_small in rdms_small]
+plt.plot(body_)
+plt.plot(hand_)
+plt.plot(face_)
+plt.grid()
+plt.xticks(range(0,48), range(1,49), size=6)
+plt.legend(["body", "hand", "face"], loc="lower right")
+plt.ylim([0.05, .95])
+del body_, hand_, face_    
+
+#%% ORIGINAL IMAGES %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+##%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+from scipy.io import loadmat, savemat
+import matplotlib.pyplot as plt
+import os
+import numpy as np
+os.chdir(r"D:\thesis-scripts\Neural networks\InceptionV3\Original images")
+
+cos_small = loadmat("coS_small_original.mat")["cos_small"]
+rdms_small = [1-co_small for co_small in cos_small]
+
+#%% Visualize
+
+#fig = plt.figure()
+#fig.suptitle("ResNet-101 (101 layers) | ORIGINAL IMAGES \nBody, hand, face, tool, mani, nman, chair")
+#for _ in range(0, len(cos)):
+#    plt.subplot(8,13,_+1)
+#    plt.imshow(cos[_])
+#    plt.colorbar()
+#    plt.clim([-.30, 1])
+#    plt.axis("off")
+#    plt.title(str(_+1), fontsize=9)
+#plt.show()  
+
+fig = plt.figure()
+fig.suptitle("INCEPTION-V3 (48 layers) | ORIGINAL IMAGES\nEvery condition is averaged\nBody, hand, face, tool, mani, nman, chair")
+for _ in range(0, len(cos_small)):
+    plt.subplot(6,8,_+1)
+    plt.imshow(cos_small[_])
+    plt.colorbar()
+    plt.clim([0, .85])
+    plt.axis("off")
+    plt.title(str(_+1), fontsize=9)
 plt.show()
 
-#%% Feature maps
+#%% RDMS
 
-# Big
-import glob
-co_dir = glob.glob(str(p/'co_conv2d_*'))
-mat = [scipy.io.loadmat(co)["co"] for co in co_dir]
-
-fig = plt.figure()
-fig.suptitle("InceptionV3\n Bodies, faces, hands, tools, manipulable objects, nonmanipulable objects, chairs")
-for _ in range(0, len(mat)):
-    plt.subplot(6,8,_+1)
-#    plt.imshow(corr_matrices[_],cmap="cividis")
-    plt.imshow(mat[_])
-    plt.colorbar()
-    plt.axis("off")
-    plt.title(str(_+1), fontsize=6)
-plt.show()    
-
-# Small
-import glob
-co_dir = glob.glob(str(p/'co_small_conv2d_*'))
-mat = [scipy.io.loadmat(co)["co_small"] for co in co_dir]
+#fig = plt.figure()
+#fig.suptitle("ResNet-101 RDMs (101 layers) | ORIGINAL IMAGES\nBody, hand, face, tool, mani, nman, chair")
+#for _ in range(0, len(rdms)):
+#    plt.subplot(8,13,_+1)
+#    plt.imshow(rdms[_])
+#    plt.colorbar()
+#    plt.clim([0, 1.25])
+#    plt.axis("off")
+#    plt.title(str(_+1), fontsize=9)
+#plt.show()  
 
 fig = plt.figure()
-fig.suptitle("InceptionV3\nEvery condition is averaged\n Bodies, faces, hands, tools, manipulable objects, nonmanipulable objects, chairs")
-for _ in range(0, len(mat)):
+fig.suptitle("INCEPTION-V3 RDM (48 layers) | ORIGINAL IMAGES\nEvery condition is averaged\nBody, hand, face, tool, mani, nman, chair")
+for _ in range(0, len(rdms_small)):
     plt.subplot(6,8,_+1)
-#    plt.imshow(corr_matrices[_],cmap="cividis")
-    plt.imshow(mat[_])
+    plt.imshow(rdms_small[_])
     plt.colorbar()
+#    plt.clim([0.1, 1])
     plt.axis("off")
-    plt.title(str(_+1), fontsize=6)
-plt.show()    
+    plt.title(str(_+1), fontsize=9)
+plt.show()
+
+#%% 1.) co_small normalized
+
+fig = plt.figure()
+fig.suptitle("INCEPTION-V3 | BODY PARTS AND OBJECTS CORRELATION | NORMALIZED \n ORIGINAL IMAGES", color="red")
+
+plt.subplot(2,2,1)
+plt.title("OBJECTS (tool, mani, nman)")
+body_ = [(co_small[body, tool] + co_small[body, mani] + co_small[body, nman])/3 for co_small in cos_small_normalized]
+hand_ = [(co_small[hand, tool] + co_small[hand, mani] + co_small[hand, nman])/3 for co_small in cos_small_normalized]
+face_ = [(co_small[face, tool] + co_small[face, mani] + co_small[face, nman])/3 for co_small in cos_small_normalized]
+plt.plot(body_)
+plt.plot(hand_)
+plt.plot(face_)
+plt.grid()
+plt.legend(["body", ])
+plt.xticks(range(0,48), range(1,49), size=6)
+plt.ylim([-2., 2.])
+plt.legend(["body", "hand", "face"], loc="top right")
+del body_, hand_, face_
+
+plt.subplot(2,2,2)
+plt.title("TOOLS")
+body_ = [co_small[body, tool] for co_small in cos_small_normalized]
+hand_ = [co_small[hand, tool] for co_small in cos_small_normalized]
+face_ = [co_small[face, tool] for co_small in cos_small_normalized]
+plt.plot(body_)
+plt.plot(hand_)
+plt.plot(face_)
+plt.grid()
+plt.xticks(range(0,48), range(1,49), size=6)
+plt.legend(["body", "hand", "face"], loc="top right")
+plt.ylim([-2., 2.])
+del body_, hand_, face_
+
+plt.subplot(2,2,3)
+plt.title("MANI")
+body_ = [co_small[body, mani] for co_small in cos_small_normalized]
+hand_ = [co_small[hand, mani] for co_small in cos_small_normalized]
+face_ = [co_small[face, mani] for co_small in cos_small_normalized]
+plt.plot(body_)
+plt.plot(hand_)
+plt.plot(face_)
+plt.grid()
+plt.xticks(range(0,48), range(1,49), size=6)
+plt.legend(["body", "hand", "face"], loc="top right")
+plt.ylim([-2., 2.])
+del body_, hand_, face_
+
+plt.subplot(2,2,4)
+plt.title("NMAN")
+body_ = [co_small[body, nman] for co_small in cos_small_normalized]
+hand_ = [co_small[hand, nman] for co_small in cos_small_normalized]
+face_ = [co_small[face, nman] for co_small in cos_small_normalized]
+plt.plot(body_)
+plt.plot(hand_)
+plt.plot(face_)
+plt.grid()
+plt.xticks(range(0,48), range(1,49), size=6)
+plt.legend(["body", "hand", "face"], loc="top right")
+plt.ylim([-2., 2.])
+del body_, hand_, face_
+
+#%% 2.) rdms from normalized co_small
+
+rdms_small_normalized = []
+for _ in cos_small_normalized:
+    rdms_small_normalized.append(1 - _)
+    
+fig = plt.figure()
+fig.suptitle("INCEPTION-V3 | BODY PARTS AND OBJECTS dissimilarities (from normalized split-half corr.) \n ORIGINAL IMAGES", color="red")
+
+plt.subplot(2,2,1)
+plt.title("OBJECTS (tool, mani, nman)")
+body_ = [(co_small[body, tool] + co_small[body, mani] + co_small[body, nman])/3 for co_small in rdms_small_normalized]
+hand_ = [(co_small[hand, tool] + co_small[hand, mani] + co_small[hand, nman])/3 for co_small in rdms_small_normalized]
+face_ = [(co_small[face, tool] + co_small[face, mani] + co_small[face, nman])/3 for co_small in rdms_small_normalized]
+plt.plot(body_)
+plt.plot(hand_)
+plt.plot(face_)
+plt.grid()
+plt.legend(["body", ])
+plt.xticks(range(0,48), range(1,49), size=6)
+plt.ylim([-0.9, 3])
+plt.legend(["body", "hand", "face"], loc="lower right")
+del body_, hand_, face_
+
+plt.subplot(2,2,2)
+plt.title("TOOLS")
+body_ = [co_small[body, tool] for co_small in rdms_small_normalized]
+hand_ = [co_small[hand, tool] for co_small in rdms_small_normalized]
+face_ = [co_small[face, tool] for co_small in rdms_small_normalized]
+plt.plot(body_)
+plt.plot(hand_)
+plt.plot(face_)
+plt.grid()
+plt.xticks(range(0,48), range(1,49), size=6)
+plt.legend(["body", "hand", "face"], loc="lower right")
+plt.ylim([-1, 3])
+del body_, hand_, face_
+
+plt.subplot(2,2,3)
+plt.title("MANI")
+body_ = [co_small[body, mani] for co_small in rdms_small_normalized]
+hand_ = [co_small[hand, mani] for co_small in rdms_small_normalized]
+face_ = [co_small[face, mani] for co_small in rdms_small_normalized]
+plt.plot(body_)
+plt.plot(hand_)
+plt.plot(face_)
+plt.grid()
+plt.xticks(range(0,48), range(1,49), size=6)
+plt.legend(["body", "hand", "face"], loc="lower right")
+plt.ylim([-1, 3])
+del body_, hand_, face_
+
+plt.subplot(2,2,4)
+plt.title("NMAN")
+body_ = [co_small[body, nman] for co_small in rdms_small_normalized]
+hand_ = [co_small[hand, nman] for co_small in rdms_small_normalized]
+face_ = [co_small[face, nman] for co_small in rdms_small_normalized]
+plt.plot(body_)
+plt.plot(hand_)
+plt.plot(face_)
+plt.grid()
+plt.xticks(range(0,48), range(1,49), size=6)
+plt.legend(["body", "hand", "face"], loc="lower right")
+plt.ylim([-1, 3])
+del body_, hand_, face_    
+
+#%% 3.) rdms from NON-normalized co_small
+    
+fig = plt.figure()
+fig.suptitle("INCEPTION-V3 | BODY PARTS AND OBJECTS dissimilarities \n ORIGINAL IMAGES", color="red")
+
+plt.subplot(2,2,1)
+plt.title("OBJECTS (tool, mani, nman)")
+body_ = [(co_small[body, tool] + co_small[body, mani] + co_small[body, nman])/3 for co_small in rdms_small]
+hand_ = [(co_small[hand, tool] + co_small[hand, mani] + co_small[hand, nman])/3 for co_small in rdms_small]
+face_ = [(co_small[face, tool] + co_small[face, mani] + co_small[face, nman])/3 for co_small in rdms_small]
+plt.plot(body_)
+plt.plot(hand_)
+plt.plot(face_)
+plt.grid()
+plt.xticks(range(0,48), range(1,49), size=6)
+plt.ylim([0, .98])
+plt.legend(["body", "hand", "face"], loc="lower right")
+del body_, hand_, face_
+
+plt.subplot(2,2,2)
+plt.title("TOOLS")
+body_ = [co_small[body, tool] for co_small in rdms_small]
+hand_ = [co_small[hand, tool] for co_small in rdms_small]
+face_ = [co_small[face, tool] for co_small in rdms_small]
+plt.plot(body_)
+plt.plot(hand_)
+plt.plot(face_)
+plt.grid()
+plt.xticks(range(0,48), range(1,49), size=6)
+plt.legend(["body", "hand", "face"], loc="lower right")
+plt.ylim([0, .98])
+del body_, hand_, face_
+
+plt.subplot(2,2,3)
+plt.title("MANI")
+body_ = [co_small[body, mani] for co_small in rdms_small]
+hand_ = [co_small[hand, mani] for co_small in rdms_small]
+face_ = [co_small[face, mani] for co_small in rdms_small]
+plt.plot(body_)
+plt.plot(hand_)
+plt.plot(face_)
+plt.grid()
+plt.xticks(range(0,48), range(1,49), size=6)
+plt.legend(["body", "hand", "face"], loc="lower right")
+plt.ylim([0, .98])
+del body_, hand_, face_
+
+plt.subplot(2,2,4)
+plt.title("NMAN")
+body_ = [co_small[body, nman] for co_small in rdms_small]
+hand_ = [co_small[hand, nman] for co_small in rdms_small]
+face_ = [co_small[face, nman] for co_small in rdms_small]
+plt.plot(body_)
+plt.plot(hand_)
+plt.plot(face_)
+plt.grid()
+plt.xticks(range(0,48), range(1,49), size=6)
+plt.legend(["body", "hand", "face"], loc="lower right")
+plt.ylim([0, .98])
+del body_, hand_, face_   
