@@ -139,7 +139,7 @@ plt.plot(face_)
 plt.grid()
 plt.legend(["body", ])
 plt.xticks(range(0,19), range(1,20))
-plt.ylim([-1.7, 0.3])
+plt.ylim([-1.7, 0.4])
 plt.legend(["body", "hand", "face"], loc="lower left")
 del body_, hand_, face_
 
@@ -154,7 +154,7 @@ plt.plot(face_)
 plt.grid()
 plt.xticks(range(0,19), range(1,20))
 plt.legend(["body", "hand", "face"], loc="lower left")
-plt.ylim([-1.7, 0.3])
+plt.ylim([-1.7, 0.4])
 del body_, hand_, face_
 
 plt.subplot(2,2,3)
@@ -168,7 +168,7 @@ plt.plot(face_)
 plt.grid()
 plt.xticks(range(0,19), range(1,20))
 plt.legend(["body", "hand", "face"], loc="lower left")
-plt.ylim([-1.7, 0.3])
+plt.ylim([-1.7, 0.4])
 del body_, hand_, face_
 
 plt.subplot(2,2,4)
@@ -182,7 +182,7 @@ plt.plot(face_)
 plt.grid()
 plt.xticks(range(0,19), range(1,20))
 plt.legend(["body", "hand", "face"], loc="lower left")
-plt.ylim([-1.7, 0.3])
+plt.ylim([-1.7, 0.4])
 del body_, hand_, face_
 
 #%% 2.) rdms from normalized co_small

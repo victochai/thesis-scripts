@@ -77,7 +77,7 @@ for _ in range(0, len(cos_small)):
     plt.subplot(11,16,_+1)
     plt.imshow(cos_small[_])
     plt.colorbar()
-    plt.clim([0, 1])
+    plt.clim([0.1, .94])
     plt.axis("off")
 #    plt.title(str(_+1), fontsize=9)
 plt.show()  
@@ -144,7 +144,7 @@ plt.plot(hand_)
 plt.plot(face_)
 plt.grid()
 plt.xticks(range(0,176, 7), range(1,177,7), size=9)
-plt.ylim([-2.1, 1.1])
+plt.ylim([-2.35, 1.2])
 plt.legend(["body", "hand", "face"], loc="lower left")
 del body_, hand_, face_
 
@@ -159,7 +159,7 @@ plt.plot(face_)
 plt.grid()
 plt.xticks(range(0,176, 7), range(1,177,7), size=9)
 plt.legend(["body", "hand", "face"], loc="lower left")
-plt.ylim([-2.1, 1.1])
+plt.ylim([-2.35, 1.2])
 del body_, hand_, face_
 
 plt.subplot(2,2,3)
@@ -173,7 +173,7 @@ plt.plot(face_)
 plt.grid()
 plt.xticks(range(0,176, 7), range(1,177,7), size=9)
 plt.legend(["body", "hand", "face"], loc="lower left")
-plt.ylim([-2.1, 1.1])
+plt.ylim([-2.35, 1.2])
 del body_, hand_, face_
 
 plt.subplot(2,2,4)
@@ -187,7 +187,7 @@ plt.plot(face_)
 plt.grid()
 plt.xticks(range(0,176, 7), range(1,177,7), size=9)
 plt.legend(["body", "hand", "face"], loc="lower left")
-plt.ylim([-2.1, 1.1])
+plt.ylim([-2.35, 1.2])
 del body_, hand_, face_
 
 #%% 2.) rdms from normalized co_small
@@ -258,7 +258,7 @@ del body_, hand_, face_
 #%% 3.) rdms from NON-normalized co_small
     
 fig = plt.figure()
-fig.suptitle("DenseNet-201 | BODY PARTS AND OBJECTS dissimilarities", color="red")
+fig.suptitle("InceptionResNet-V2 | BODY PARTS AND OBJECTS dissimilarities", color="red")
 
 plt.subplot(2,2,1)
 plt.title("OBJECTS (tool, mani, nman)")
@@ -401,7 +401,7 @@ plt.plot(face_)
 plt.grid()
 plt.legend(["body", ])
 plt.xticks(range(0,176, 7), range(1,177,7), size=9)
-plt.ylim([-2.05, 1.95])
+plt.ylim([-2.4, 1.95])
 plt.legend(["body", "hand", "face"], loc="top right")
 del body_, hand_, face_
 
@@ -416,7 +416,7 @@ plt.plot(face_)
 plt.grid()
 plt.xticks(range(0,176, 7), range(1,177,7), size=9)
 plt.legend(["body", "hand", "face"], loc="top right")
-plt.ylim([-2.05, 1.95])
+plt.ylim([-2.4, 1.95])
 del body_, hand_, face_
 
 plt.subplot(2,2,3)
@@ -430,7 +430,7 @@ plt.plot(face_)
 plt.grid()
 plt.xticks(range(0,176, 7), range(1,177,7), size=9)
 plt.legend(["body", "hand", "face"], loc="top right")
-plt.ylim([-2.05, 1.95])
+plt.ylim([-2.4, 1.95])
 del body_, hand_, face_
 
 plt.subplot(2,2,4)
@@ -444,7 +444,7 @@ plt.plot(face_)
 plt.grid()
 plt.xticks(range(0,176, 7), range(1,177,7), size=9)
 plt.legend(["body", "hand", "face"], loc="top right")
-plt.ylim([-2.05, 1.95])
+plt.ylim([-2.4, 1.95])
 del body_, hand_, face_
 
 #%% 2.) rdms from normalized co_small

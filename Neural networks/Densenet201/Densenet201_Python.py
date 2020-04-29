@@ -83,7 +83,7 @@ for _ in range(0, len(cos_small)):
     plt.subplot(13,16,_+1)
     plt.imshow(cos_small[_])
     plt.colorbar()
-    plt.clim([0, 1])
+    plt.clim([0, .95])
     plt.axis("off")
 #    plt.title(str(_+1), fontsize=9)
 plt.show()  
